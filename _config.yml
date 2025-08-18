@@ -1,5 +1,5 @@
 
-theme: jekyll-theme-minimal
+theme: jekyll-theme-slate
 title: My Blog
 description: A blog about my thoughts and experiences.
 baseurl: "/www.trueadmin.ru"

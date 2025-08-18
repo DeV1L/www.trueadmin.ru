@@ -3,9 +3,6 @@ title: "Kubernetes tricks. How to get a shell into a Kubernetes Node?"
 date: 2020-06-18
 ---
 
-#  Kubernetes tricks. How to get shell into a Kubernetes Node?
-
-
 ##  **Question**
 
 I don't have SSH access to Kubernnetes nodes. How I can get into?  
