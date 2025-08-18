@@ -1,6 +1,7 @@
 ---
 title: "GitLab -> VSTS"
 date: 2017-04-10
+layout: default
 ---
 
 В VSTS есть возможность [импортировать](https://www.visualstudio.com/en-us/docs/git/import-git-repository) Git репозиторий прямо из веб-интерфейса  
