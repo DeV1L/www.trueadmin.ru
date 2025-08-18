@@ -2,9 +2,14 @@
 ## Blog Posts
 
 <ul>
-{% for post in site.posts %}
+{%- if site.posts != empty -%}
+  {%- assign posts_list = site.posts -%}
+{%- else -%}
+  {%- assign posts_list = site.pages | where_exp: "p", "p.path contains 'posts/'" | sort: 'date' | reverse -%}
+{%- endif -%}
+{%- for post in posts_list -%}
   <li>
-    <a href="{{ post.url | absolute_url }}">{{ post.title }}</a> - {{ post.date | date: "%B %d, %Y" }}
+    <a href="{{ post.url | absolute_url }}">{{ post.title }}</a>{% if post.date %} - {{ post.date | date: "%B %d, %Y" }}{% endif %}
   </li>
-{% endfor %}
+{%- endfor -%}
 </ul>
