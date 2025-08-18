@@ -4,3 +4,15 @@ title: My Blog
 description: A blog about my thoughts and experiences.
 baseurl: "/www.trueadmin.ru"
 url: "https://dev1l.github.io"
+
+defaults:
+	- scope:
+			path: ""
+			type: "posts"
+		values:
+			layout: "default"
+	- scope:
+			path: ""
+			type: "pages"
+		values:
+			layout: "default"
