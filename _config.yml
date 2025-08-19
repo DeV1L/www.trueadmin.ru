@@ -5,3 +5,4 @@ baseurl: "/www.trueadmin.ru"
 url: "https://dev1l.github.io"
 plugins:
   - jekyll-remote-theme
+  - jekyll-include-cache
