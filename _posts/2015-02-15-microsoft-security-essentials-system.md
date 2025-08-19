@@ -1,7 +1,6 @@
 ---
 title: "Удалённая установка кейлоггера на компьютер с Microsoft Security Essentials или System Center Endpoint Protection"
 date: 2015-02-15
-layout: default
 ---
 
 **Дано:** Сессия PsExec (либо любая другая) с административными привилегиями на машине жертвы. У жертвы установлен Microsoft Security Essentials либо System Center Endpoint Protection.  

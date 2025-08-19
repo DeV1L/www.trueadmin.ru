@@ -1,7 +1,6 @@
 ---
 title: "Как сжать базу Zabbix (PostgreSQL)"
 date: 2018-04-03
-layout: default
 ---
 
 ##  Введение

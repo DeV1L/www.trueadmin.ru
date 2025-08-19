@@ -1,7 +1,6 @@
 ---
 title: "Azure App Service (Web App)"
 date: 2016-10-31
-layout: default
 ---
 
 Допустим, вы открыли доступ к своему on-premise SQL Server для приложения в Azure. Как проверить, что всё сделано правильно?  

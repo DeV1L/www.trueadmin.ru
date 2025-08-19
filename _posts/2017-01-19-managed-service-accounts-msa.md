@@ -1,7 +1,6 @@
 ---
 title: "Managed Service Accounts (MSA)"
 date: 2017-01-19
-layout: default
 ---
 
 Для запуска службы от имени [MSA](https://technet.microsoft.com/ru-ru/library/dd378925\(v=ws.10\).aspx) необходимо:  

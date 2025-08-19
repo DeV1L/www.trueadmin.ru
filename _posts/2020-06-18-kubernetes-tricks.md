@@ -5,7 +5,6 @@ date: 2020-06-18
 
 ##  **Question**
 
-layout: default
 I don't have SSH access to Kubernnetes nodes. How I can get into?  
 
 ##  **Answer**

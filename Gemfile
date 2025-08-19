@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
 gem "jekyll", "~> 4.2"
-gem "jekyll-theme-slate"
+gem "minimal-mistakes-jekyll"
 gem "webrick", "~> 1.7"
