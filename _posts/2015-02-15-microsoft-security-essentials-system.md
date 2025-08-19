@@ -20,7 +20,7 @@ layout: default
   
 1\. Открываем сессию PsExec  
   
-[![](/images/1.1.jpg)](/images/1.1.jpg)  
+[![](images/1.1.jpg)](images/1.1.jpg)  
   
 
 
@@ -31,7 +31,7 @@ layout: default
 **  
 
 
-[![](/images/8.1.jpg)](/images/8.1.jpg)  
+[![](images/8.1.jpg)](images/8.1.jpg)  
 
 
   
@@ -47,7 +47,7 @@ layout: default
   
 
 
-[![](/images/3.jpg)](/images/3.jpg)
+[![](images/3.jpg)](images/3.jpg)
 
   
 
@@ -63,7 +63,7 @@ layout: default
   
 
 
-[![](/images/4.jpg)](/images/4.jpg)
+[![](images/4.jpg)](images/4.jpg)
 
   
 
@@ -71,7 +71,7 @@ layout: default
   
 
 
-[![](/images/5.jpg)](/images/5.jpg)
+[![](images/5.jpg)](images/5.jpg)
 
   
 
@@ -102,7 +102,7 @@ layout: default
   
 
 
-[![](/images/6.jpg)](/images/6.jpg)
+[![](images/6.jpg)](images/6.jpg)
 
   
 
@@ -144,7 +144,7 @@ layout: default
   
 
 
-[![](/images/7.1.jpg)](/images/7.1.jpg)
+[![](images/7.1.jpg)](images/7.1.jpg)
 
   
   
@@ -158,7 +158,7 @@ layout: default
   
 
 
-[![](/images/8.1.jpg)](/images/8.1.jpg)
+[![](images/8.1.jpg)](images/8.1.jpg)
 
   
 
@@ -173,7 +173,7 @@ layout: default
   
 
 
-[![](/images/9.jpg)](/images/9.jpg)
+[![](images/9.jpg)](images/9.jpg)
 
   
 
@@ -183,7 +183,7 @@ PROFIT! Логгер запущен, а антивирус жертвы ни о 
   
 
 
-[![](/images/10.jpg)](/images/10.jpg)
+[![](images/10.jpg)](images/10.jpg)
 
   
 

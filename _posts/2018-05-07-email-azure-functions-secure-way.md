@@ -41,14 +41,14 @@ layout: default
   
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgn_GQqvB9tsJ5ZSaL-6UKZnCsXnTTTgJvRvpHS_AAz6FwaIyxjcQVqmxRg9Xv8MrR3_045T7-HuplbC6V1E4T7SCS3YQaJngS0G6aBDA5RedcF5M4c-QG76da-iIyskgPcjrlQ2A-_myPN/s640/Platform+features.jpg)](/images/Platform+features.jpg)
+[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgn_GQqvB9tsJ5ZSaL-6UKZnCsXnTTTgJvRvpHS_AAz6FwaIyxjcQVqmxRg9Xv8MrR3_045T7-HuplbC6V1E4T7SCS3YQaJngS0G6aBDA5RedcF5M4c-QG76da-iIyskgPcjrlQ2A-_myPN/s640/Platform+features.jpg)](images/Platform+features.jpg)
 
   
 Включаем **"Register with Azure Active Directory"**  
   
 
 
-[![](/images/Register+with+Azure+Active+Directory.jpg)](/images/Register+with+Azure+Active+Directory.jpg)
+[![](images/Register+with+Azure+Active+Directory.jpg)](images/Register+with+Azure+Active+Directory.jpg)
 
   
 Это позволить приложению запрашивать access token для получения доступа к другим ресурсам Azure (в нашем случае Key Vault). Подробнее [тут](https://docs.microsoft.com/en-us/azure/app-service/app-service-managed-service-identity).  
@@ -63,12 +63,12 @@ layout: default
   
 
 
-[![](/images/sender+login.jpg)](/images/sender+login.jpg)
+[![](images/sender+login.jpg)](images/sender+login.jpg)
 
   
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEijs5HTl_hcWKC1fRgH7SYcm9xlp8NVXSsQuFVCE90VnaUDDhnXGJgG5RopYPCRXMuBdoIwIAbWq66idLZgvnI3443_WXQACKCMamnofQvbPXOFD3RUu0Nge_1Ta13IXYwnLmkWpHTaLa4Y/s640/sender+password.jpg)](/images/sender+password.jpg)
+[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEijs5HTl_hcWKC1fRgH7SYcm9xlp8NVXSsQuFVCE90VnaUDDhnXGJgG5RopYPCRXMuBdoIwIAbWq66idLZgvnI3443_WXQACKCMamnofQvbPXOFD3RUu0Nge_1Ta13IXYwnLmkWpHTaLa4Y/s640/sender+password.jpg)](images/sender+password.jpg)
 
   
 Разрешаем нашему Function App запрашивать эти логин и пароль. Для этого идём в **Key vault - > Access policies -> Add new  **и выбираем:  
@@ -79,7 +79,7 @@ layout: default
 
 
 
-[![](/images/Access+policy.jpg)](/images/Access+policy.jpg)
+[![](images/Access+policy.jpg)](images/Access+policy.jpg)
 
   
 
@@ -95,7 +95,7 @@ layout: default
   
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg8zoLZ-jwjg1qpeGVCAvfirGGW_nhVrcPlwBXyNYwP89i3OvmZKshBhA43BAFrU7ywq3WHHCFBFa8UMz6TFQR2ykw-ey3hk4cYtNtNISb0QFlPAu3LAMtpiNZj7PaurbkxxAWn6QPZ1Sxe/s640/Function.jpg)](/images/Function.jpg)
+[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg8zoLZ-jwjg1qpeGVCAvfirGGW_nhVrcPlwBXyNYwP89i3OvmZKshBhA43BAFrU7ywq3WHHCFBFa8UMz6TFQR2ykw-ey3hk4cYtNtNISb0QFlPAu3LAMtpiNZj7PaurbkxxAWn6QPZ1Sxe/s640/Function.jpg)](images/Function.jpg)
 
   
   
@@ -103,7 +103,7 @@ layout: default
   
 
 
-[![](/images/Email.jpg)](/images/Email.jpg)
+[![](images/Email.jpg)](images/Email.jpg)
 
   
   

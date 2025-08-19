@@ -7,9 +7,9 @@ layout: default
 После установки в режиме шлюза vGate радостно начинает блокировать весь трафик на внешнем сетевом интерфейсе, кроме необходимого для соединения клиента с сервером авторизации.  
 
 
-[![](/images/1.png)](/images/1.png)
+[![](images/1.png)](images/1.png)
 
-[![](/images/2.jpg)](/images/2.jpg)
+[![](images/2.jpg)](images/2.jpg)
 
   
 
@@ -18,7 +18,7 @@ layout: default
   
 
 
-[![](/images/3.jpg)](/images/3.jpg)
+[![](images/3.jpg)](images/3.jpg)
 
   
 
@@ -43,7 +43,7 @@ layout: default
   
 
 
-[![](/images/4.jpg)](/images/4.jpg)
+[![](images/4.jpg)](images/4.jpg)
 
   
 
@@ -61,7 +61,7 @@ layout: default
   
 
 
-[![](/images/5.jpg)](/images/5.jpg)
+[![](images/5.jpg)](images/5.jpg)
 
   
   

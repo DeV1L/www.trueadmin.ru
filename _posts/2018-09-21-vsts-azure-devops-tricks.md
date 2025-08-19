@@ -31,7 +31,7 @@ layout: default
   
 
 
-[![](/images/Result.jpg)](/images/Result.jpg)
+[![](images/Result.jpg)](images/Result.jpg)
 
   
 

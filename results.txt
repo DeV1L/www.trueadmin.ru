@@ -1,0 +1,40 @@
+evgeniisavchenko@Mac www.trueadmin.ru % bundle exec jekyll serve
+Source locally installed gems is ignoring #<Bundler::StubSpecification name=rbs version=2.8.2 platform=ruby> because it is missing extensions
+Source locally installed gems is ignoring #<Bundler::StubSpecification name=debug version=1.7.1 platform=ruby> because it is missing extensions
+Configuration file: /Users/evgeniisavchenko/git/tmp/www.trueadmin.ru/_config.yml
+            Source: /Users/evgeniisavchenko/git/tmp/www.trueadmin.ru
+       Destination: /Users/evgeniisavchenko/git/tmp/www.trueadmin.ru/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating... 
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import "jekyll-theme-slate";
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    /Users/evgeniisavchenko/git/tmp/www.trueadmin.ru/assets/css/style.scss 1:9  root stylesheet
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import "rouge-github";
+  │         ^^^^^^^^^^^^^^
+  ╵
+    jekyll-theme-slate.scss 1:9                                                 @import
+    /Users/evgeniisavchenko/git/tmp/www.trueadmin.ru/assets/css/style.scss 1:9  root stylesheet
+                    done in 0.243 seconds.
+ Auto-regeneration: enabled for '/Users/evgeniisavchenko/git/tmp/www.trueadmin.ru'
+    Server address: http://127.0.0.1:4000/www.trueadmin.ru/
+  Server running... press ctrl-c to stop.
+[2025-08-19 23:04:05] ERROR '/images/1.1.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/8.1.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/3.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/5.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/4.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/7.1.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/9.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/6.jpg' not found.
+[2025-08-19 23:04:05] ERROR '/images/10.jpg' not found.

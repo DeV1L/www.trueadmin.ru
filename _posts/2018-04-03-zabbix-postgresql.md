@@ -23,7 +23,7 @@ layout: default
   
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiF3kbOlybJGAn1u3tNw8PmCUPpA-d5rajMdx3vsXo12i0Ekw3SDM3zPRMdBhX6RDngdrvpD0CSmqU0FTGWL7xYpwlV9KkCOesBr9rIyaCIrJdwTnzWq7S6Owye1QpA1OyuoqURK_tuNDwf/s640/pgsql+disk+space+usage+1.jpg)](/images/pgsql+disk+space+usage+1.jpg)
+[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiF3kbOlybJGAn1u3tNw8PmCUPpA-d5rajMdx3vsXo12i0Ekw3SDM3zPRMdBhX6RDngdrvpD0CSmqU0FTGWL7xYpwlV9KkCOesBr9rIyaCIrJdwTnzWq7S6Owye1QpA1OyuoqURK_tuNDwf/s640/pgsql+disk+space+usage+1.jpg)](images/pgsql+disk+space+usage+1.jpg)
 
   
   
@@ -53,7 +53,7 @@ layout: default
 Удалите или отключите их.  
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimsqaU7ywIV7wnCIFHocRZoPnuqvWpZ4L_pB0JqO3PRewP7sRXFAkx_2I6pFZW_vhTP6ws_bhLo9qPkJ83M1KPRkaWfIJrTIjFJY4UVq-CBeDVDjiM4MtPxDp4l4QwKwiXNN0DT9is5dE7/s400/disable+or+delete+host.jpg)](/images/disable+or+delete+host.jpg)
+[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimsqaU7ywIV7wnCIFHocRZoPnuqvWpZ4L_pB0JqO3PRewP7sRXFAkx_2I6pFZW_vhTP6ws_bhLo9qPkJ83M1KPRkaWfIJrTIjFJY4UVq-CBeDVDjiM4MtPxDp4l4QwKwiXNN0DT9is5dE7/s400/disable+or+delete+host.jpg)](images/disable+or+delete+host.jpg)
 
   
   
@@ -68,7 +68,7 @@ layout: default
 
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjmjojNBmR8wTbrwqasx8DZIBeMYqIUXewtjJ19eZT_RO_fd8gUpSf8Q4cXMfbSffNJyfhtM-PNiIATfMNpZyMG3JB3tzXRdQgGVD8JDsIPtMUn3J5pxHRsL_ACCQ-lNapIj1uTQrIElJ1o/s400/delete+template.jpg)](/images/delete+template.jpg)
+[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjmjojNBmR8wTbrwqasx8DZIBeMYqIUXewtjJ19eZT_RO_fd8gUpSf8Q4cXMfbSffNJyfhtM-PNiIATfMNpZyMG3JB3tzXRdQgGVD8JDsIPtMUn3J5pxHRsL_ACCQ-lNapIj1uTQrIElJ1o/s400/delete+template.jpg)](images/delete+template.jpg)
 
   
 
@@ -88,7 +88,7 @@ layout: default
   
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8Im1TuMKqpQBLuN1vpJP5E6JNdYXMZmoX3FcgzqXka_F1bjdOycAyMfY4QV3IIeh_FdWeed5TOgGXUWkR1wOvhg4eeZyC5EoiOP_kCQw1dytRBmjSLxiKAv7DIgTnQSL5VBjmwk7DyWuJ/s640/bad+template.jpg)](/images/bad+template.jpg)
+[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8Im1TuMKqpQBLuN1vpJP5E6JNdYXMZmoX3FcgzqXka_F1bjdOycAyMfY4QV3IIeh_FdWeed5TOgGXUWkR1wOvhg4eeZyC5EoiOP_kCQw1dytRBmjSLxiKAv7DIgTnQSL5VBjmwk7DyWuJ/s640/bad+template.jpg)](images/bad+template.jpg)
 
   
 Конечно, возможно, вам действительно очень необходимо хранить данные по производительности памяти с двадцатисекундными интервалами в течении недели. Если так - будьте готовы заплатить за эторазмером базы. Если нет - просто уменьште эти параметры в несколько раз.  
@@ -98,7 +98,7 @@ layout: default
   
 
 
-[![](/images/override+houskeeping.jpg)](/images/override+houskeeping.jpg)
+[![](images/override+houskeeping.jpg)](images/override+houskeeping.jpg)
 
   
 
@@ -251,7 +251,7 @@ layout: default
 
 Итого размер занимаемого дискового пространства уменьшлся более чем в **6 раз**.
 
-[![](/images/pgsql+disk+space+usage+2.jpg)](/images/pgsql+disk+space+usage+2.jpg)
+[![](images/pgsql+disk+space+usage+2.jpg)](images/pgsql+disk+space+usage+2.jpg)
     
     
     
