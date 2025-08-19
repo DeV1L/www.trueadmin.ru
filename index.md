@@ -1,4 +1,9 @@
 
+---
+layout: default
+title: Home
+---
+
 ## Blog Posts
 
 <ul>
@@ -13,3 +18,5 @@
   </li>
 {%- endfor -%}
 </ul>
+
+
