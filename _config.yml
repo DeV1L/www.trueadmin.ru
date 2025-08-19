@@ -1,6 +1,7 @@
-
-theme: minimal-mistakes-jekyll
+remote_theme: mmistakes/minimal-mistakes
 title: My Blog
 description: A blog about my thoughts and experiences.
 baseurl: "/www.trueadmin.ru"
 url: "https://dev1l.github.io"
+plugins:
+  - jekyll-remote-theme
