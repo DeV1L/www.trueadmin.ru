@@ -12,6 +12,13 @@
   align-items: flex-start;
 }
 
+/* Page layout with sidebar: content + right sidebar */
+.page-with-sidebar {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
 .content-area {
   flex: 1 1 auto;
   min-width: 0;
@@ -20,11 +27,15 @@
 
 .custom-sidebar-wrapper {
   flex: 0 0 300px;
+  /* keep the aside aligned to the top of the row */
+  align-self: flex-start;
 }
 
 .custom-sidebar {
+  max-width: 300px;
   position: sticky;
   top: 80px;
+  margin-left: 30px;
   margin-bottom: 2rem;
 }
 
@@ -39,5 +50,5 @@
 @media (max-width: 880px) {
   .page-with-sidebar { display: block; }
   .custom-sidebar-wrapper { width: auto; }
-  .custom-sidebar { position: relative; top: auto; }
+  .custom-sidebar { position: relative; top: auto; margin-left: 0; }
 }
