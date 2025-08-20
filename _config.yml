@@ -6,3 +6,11 @@ url: "https://dev1l.github.io"
 plugins:
   - jekyll-remote-theme
   - jekyll-include-cache
+
+# Ensure posts use our `post` layout so the sidebar is injected on production builds
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
