@@ -28,7 +28,9 @@
 
 /* Home page layout and sidebar */
 .layout--home .archive {
-  margin-right: 350px !important;  /* Make space for sidebar */
+  margin-left: 350px !important;  /* Make space for sidebar */
+  max-width: calc(100% - 350px) !important;
+  padding-right: 2rem !important;
 }
 
 .layout--home .sidebar.sticky {
@@ -36,13 +38,19 @@
   top: 2em !important;
   float: left !important;
   width: 300px !important;
-  padding-right: 2rem !important;
+  margin-left: 2rem !important;
 }
 
 /* Home page content and spacing */
 .layout--home .page__content {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Fix for YAML front matter */
+.layout--home .archive > hr,
+.layout--home .archive > p:first-of-type {
+  display: none !important;
 }
 
 .layout--home .archive__item-title {
