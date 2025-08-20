@@ -1,11 +1,7 @@
-
 ---
-layout: post
+layout: home
 title: Home
 ---
-
-<div class="page-with-sidebar">
-  <div class="content-area">
 
 ## Blog Posts
 
@@ -16,8 +12,5 @@ title: Home
   </li>
 {%- endfor -%}
 </ul>
-
-  </div>
-</div>
 
 
