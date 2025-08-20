@@ -1,31 +1,49 @@
-/* Initial layout container: post content + right sidebar */
+/* Base layout for all pages */
 .page-with-sidebar {
   display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-between !important;
   margin: 0 auto !important;
-  max-width: 100% !important;
+  width: 100% !important;
   padding: 0 !important;
 }
 
-/* Main content area */
-.content-area {
+/* Post page specific layout */
+.layout--post .page-with-sidebar {
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  gap: 2rem !important;
+}
+
+.layout--post .content-area {
   flex: 1 1 auto !important;
   max-width: calc(100% - 350px) !important;
   min-width: 0 !important;
   order: 1 !important;
 }
 
-/* Sidebar container */
-.custom-sidebar-wrapper {
+.layout--post .custom-sidebar-wrapper {
   flex: 0 0 300px !important;
   margin-left: 50px !important;
   order: 2 !important;
   padding: 0 !important;
-  position: relative !important;
 }
 
-/* Sticky sidebar content */
+/* Home page specific layout */
+.layout--home .page-with-sidebar {
+  flex-direction: row-reverse !important;
+}
+
+.layout--home .content-area {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  padding-right: 2rem !important;
+}
+
+.layout--home .custom-sidebar-wrapper {
+  flex: 0 0 300px !important;
+  padding: 0 !important;
+}
+
+/* Sticky sidebar for all pages */
 .custom-sidebar {
   position: sticky !important;
   top: 2em !important;
