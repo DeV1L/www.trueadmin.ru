@@ -3,3 +3,11 @@ theme: minimal-mistakes-jekyll
 baseurl: ""
 plugins:
   - jekyll-include-cache
+
+# Ensure posts use our `post` layout locally so the sidebar is injected
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"

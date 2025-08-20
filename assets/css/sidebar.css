@@ -5,10 +5,39 @@
   float: right;
   margin-left: 30px;
   margin-bottom: 2rem;
+/* Page layout with sidebar: content + right sidebar */
+.page-with-sidebar {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
 }
+
+.content-area {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 1rem; /* inner horizontal padding */
+}
+
+.custom-sidebar-wrapper {
+  flex: 0 0 300px;
+}
+
+.custom-sidebar {
+  position: sticky;
+  top: 80px;
+  margin-bottom: 2rem;
+}
+
 .post-sidebar { font-size: 0.95rem; }
 .post-sidebar h3 { margin-top: 0; }
 .post-sidebar .ps-years, .post-sidebar .ps-months, .post-sidebar .ps-posts { list-style: none; margin: 0; padding-left: 0.5rem; }
 .post-sidebar details summary { cursor: pointer; }
 .post-sidebar .ps-post a { color: inherit; text-decoration: none; }
 .post-sidebar .ps-post a:hover { text-decoration: underline; }
+
+/* Responsive: stack on narrow viewports */
+@media (max-width: 880px) {
+  .page-with-sidebar { display: block; }
+  .custom-sidebar-wrapper { width: auto; }
+  .custom-sidebar { position: relative; top: auto; }
+}
