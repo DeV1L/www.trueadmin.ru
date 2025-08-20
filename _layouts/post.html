@@ -2,16 +2,18 @@
 layout: default
 ---
 
-<!-- Lightweight post layout that uses the theme's default layout as a parent.
-     Places the post content and a right-hand sidebar next to each other. -->
-<div class="page-with-sidebar">
-  <main id="main" role="main" class="content-area">
-    <article class="post-content">
-      {{ content }}
+<div id="main" class="page-with-sidebar">
+  <div class="content-area">
+    <article class="post h-entry">
+      <div class="post-content e-content">
+        {{ content }}
+      </div>
     </article>
-  </main>
+  </div>
 
-  <aside class="custom-sidebar-wrapper">
-    {% include sidebar.html %}
-  </aside>
+  <div class="custom-sidebar-wrapper">
+    <div class="custom-sidebar">
+      {% include sidebar.html %}
+    </div>
+  </div>
 </div>
