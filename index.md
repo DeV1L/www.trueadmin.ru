@@ -18,12 +18,6 @@ title: Home
 </ul>
 
   </div>
-
-  <div class="custom-sidebar-wrapper">
-    <div class="custom-sidebar">
-      {% include sidebar.html %}
-    </div>
-  </div>
 </div>
 
 
