@@ -1,3 +1,4 @@
 .env
 _site
 _site_local_build
+private
