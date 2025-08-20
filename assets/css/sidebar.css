@@ -26,13 +26,27 @@
   width: 300px !important;
 }
 
-/* Theme's home page sidebar */
+/* Home page layout and sidebar */
+.layout--home .archive {
+  margin-right: 350px !important;  /* Make space for sidebar */
+}
+
 .layout--home .sidebar.sticky {
   position: sticky !important;
   top: 2em !important;
-  float: right !important;
+  float: left !important;
   width: 300px !important;
-  margin-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+
+/* Home page content and spacing */
+.layout--home .page__content {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+.layout--home .archive__item-title {
+  margin-top: 0.5em !important;
 }
 
 /* Post sidebar styling */
@@ -48,47 +62,12 @@
   .layout--post .page-with-sidebar { display: block; }
   .layout--post .custom-sidebar-wrapper { width: auto; }
   .layout--post .custom-sidebar { position: relative; top: auto; margin-left: 0; }
-  .layout--home .sidebar.sticky { float: none; width: auto; margin-left: 0; }
-}
-
-/* Sticky sidebar for all pages */
-.custom-sidebar {
-  position: sticky !important;
-  top: 2em !important;
-  padding-top: 2em !important;
-  width: 300px !important;
-}
-
-.post-sidebar { font-size: 0.95rem; }
-.post-sidebar h3 { margin-top: 0; }
-.post-sidebar .ps-years, .post-sidebar .ps-months, .post-sidebar .ps-posts { list-style: none; margin: 0; padding-left: 0.5rem; }
-.post-sidebar details summary { cursor: pointer; }
-.post-sidebar .ps-post a { color: inherit; text-decoration: none; }
-.post-sidebar .ps-post a:hover { text-decoration: underline; }
-
-/* Responsive: stack on narrow viewports */
-@media (max-width: 880px) {
-  .page-with-sidebar { display: block; }
-  .custom-sidebar-wrapper { width: auto; }
-  .custom-sidebar { position: relative; top: auto; margin-left: 0; }
-}
-
-/* High-specificity overrides to ensure sidebar sits at the top-right of post pages.
-   These use !important to defeat theme rules that may run after this stylesheet. */
-.page-with-sidebar {
-  display: flex !important;
-  gap: 2rem !important;
-  align-items: flex-start !important;
-}
-.page-with-sidebar > .custom-sidebar-wrapper {
-  align-self: flex-start !important;
-  display: block !important;
-}
-.page-with-sidebar > .custom-sidebar-wrapper > .custom-sidebar {
-  position: sticky !important;
-  top: 80px !important;
-  margin-top: 0 !important;
-  margin-left: 30px !important;
-  max-width: 300px !important;
+  .layout--home .archive { margin-right: 0 !important; }
+  .layout--home .sidebar.sticky { 
+    float: none !important;
+    width: auto !important;
+    margin: 2rem 0 !important;
+    padding: 0 !important;
+  }
 }
 
