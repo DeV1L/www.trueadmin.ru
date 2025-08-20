@@ -1,46 +1,44 @@
-/* Base layout for all pages */
+/* Common styles for the sidebar */
+.custom-sidebar {
+  position: sticky !important;
+  top: 2em !important;
+  width: 300px !important;
+}
+
+/* Main container for any page with sidebar */
 .page-with-sidebar {
   display: flex !important;
   margin: 0 auto !important;
   width: 100% !important;
   padding: 0 !important;
-}
-
-/* Post page specific layout */
-.layout--post .page-with-sidebar {
-  flex-direction: row !important;
-  justify-content: space-between !important;
   gap: 2rem !important;
 }
 
-.layout--post .content-area {
+/* Content area common styles */
+.content-area {
   flex: 1 1 auto !important;
-  max-width: calc(100% - 350px) !important;
   min-width: 0 !important;
-  order: 1 !important;
+  max-width: calc(100% - 350px) !important;
+}
+
+/* Sidebar wrapper common styles */
+.custom-sidebar-wrapper {
+  flex: 0 0 300px !important;
+  position: relative !important;
+}
+
+/* Homepage-specific styles (default layout) */
+body:not(.layout--post) .page-with-sidebar {
+  flex-direction: row !important; /* Content left, sidebar right */
+}
+
+/* Post page specific styles */
+.layout--post .page-with-sidebar {
+  flex-direction: row !important; /* Content left, sidebar right */
 }
 
 .layout--post .custom-sidebar-wrapper {
-  flex: 0 0 300px !important;
-  margin-left: 50px !important;
-  order: 2 !important;
-  padding: 0 !important;
-}
-
-/* Home page specific layout */
-.layout--home .page-with-sidebar {
-  flex-direction: row-reverse !important;
-}
-
-.layout--home .content-area {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  padding-right: 2rem !important;
-}
-
-.layout--home .custom-sidebar-wrapper {
-  flex: 0 0 300px !important;
-  padding: 0 !important;
+  margin-left: 2rem !important;
 }
 
 /* Sticky sidebar for all pages */
