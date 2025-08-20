@@ -52,3 +52,23 @@
   .custom-sidebar-wrapper { width: auto; }
   .custom-sidebar { position: relative; top: auto; margin-left: 0; }
 }
+
+/* High-specificity overrides to ensure sidebar sits at the top-right of post pages.
+   These use !important to defeat theme rules that may run after this stylesheet. */
+.page-with-sidebar {
+  display: flex !important;
+  gap: 2rem !important;
+  align-items: flex-start !important;
+}
+.page-with-sidebar > .custom-sidebar-wrapper {
+  align-self: flex-start !important;
+  display: block !important;
+}
+.page-with-sidebar > .custom-sidebar-wrapper > .custom-sidebar {
+  position: sticky !important;
+  top: 80px !important;
+  margin-top: 0 !important;
+  margin-left: 30px !important;
+  max-width: 300px !important;
+}
+
