@@ -1,44 +1,54 @@
-/* Common styles for the sidebar */
-.custom-sidebar {
-  position: sticky !important;
-  top: 2em !important;
-  width: 300px !important;
-}
-
-/* Main container for any page with sidebar */
-.page-with-sidebar {
+/* Post page layout */
+.layout--post .page-with-sidebar {
   display: flex !important;
   margin: 0 auto !important;
   width: 100% !important;
   padding: 0 !important;
   gap: 2rem !important;
+  flex-direction: row !important;
 }
 
-/* Content area common styles */
-.content-area {
+.layout--post .content-area {
   flex: 1 1 auto !important;
   min-width: 0 !important;
   max-width: calc(100% - 350px) !important;
 }
 
-/* Sidebar wrapper common styles */
-.custom-sidebar-wrapper {
+.layout--post .custom-sidebar-wrapper {
   flex: 0 0 300px !important;
   position: relative !important;
-}
-
-/* Homepage-specific styles (default layout) */
-body:not(.layout--post) .page-with-sidebar {
-  flex-direction: row !important; /* Content left, sidebar right */
-}
-
-/* Post page specific styles */
-.layout--post .page-with-sidebar {
-  flex-direction: row !important; /* Content left, sidebar right */
-}
-
-.layout--post .custom-sidebar-wrapper {
   margin-left: 2rem !important;
+}
+
+.layout--post .custom-sidebar {
+  position: sticky !important;
+  top: 2em !important;
+  width: 300px !important;
+}
+
+/* Theme's home page sidebar */
+.layout--home .sidebar.sticky {
+  position: sticky !important;
+  top: 2em !important;
+  float: right !important;
+  width: 300px !important;
+  margin-left: 2rem !important;
+}
+
+/* Post sidebar styling */
+.post-sidebar { font-size: 0.95rem; }
+.post-sidebar h3 { margin-top: 0; }
+.post-sidebar .ps-years, .post-sidebar .ps-months, .post-sidebar .ps-posts { list-style: none; margin: 0; padding-left: 0.5rem; }
+.post-sidebar details summary { cursor: pointer; }
+.post-sidebar .ps-post a { color: inherit; text-decoration: none; }
+.post-sidebar .ps-post a:hover { text-decoration: underline; }
+
+/* Responsive: stack on narrow viewports */
+@media (max-width: 880px) {
+  .layout--post .page-with-sidebar { display: block; }
+  .layout--post .custom-sidebar-wrapper { width: auto; }
+  .layout--post .custom-sidebar { position: relative; top: auto; margin-left: 0; }
+  .layout--home .sidebar.sticky { float: none; width: auto; margin-left: 0; }
 }
 
 /* Sticky sidebar for all pages */
