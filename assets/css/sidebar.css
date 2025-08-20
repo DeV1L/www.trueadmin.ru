@@ -13,7 +13,7 @@
 .layout--home .content-area {
   flex: 1 1 auto !important;
   min-width: 0 !important;
-  max-width: calc(100% - 350px) !important;
+  max-width: calc(100% - 335px) !important;
 }
 
 .layout--post .custom-sidebar-wrapper,
@@ -39,7 +39,7 @@
 }
 
 .layout--home .archive {
-  max-width: calc(100% - 350px) !important;
+  max-width: calc(100% - 335px) !important;
 }
 
 /* Fix for YAML front matter on home */
@@ -49,11 +49,11 @@
 }
 
 /* Post sidebar styling (used by both layouts) */
-.post-sidebar { font-size: 0.95rem; }
+.post-sidebar { font-size: 0.85rem; } /* Sidebar dates font size */
 .post-sidebar h3 { margin-top: 0; }
 .post-sidebar .ps-years, .post-sidebar .ps-months, .post-sidebar .ps-posts { list-style: none; margin: 0; padding-left: 0.5rem; }
 .post-sidebar details summary { cursor: pointer; }
-.post-sidebar .ps-post a { color: inherit; text-decoration: none; }
+.post-sidebar .ps-post a { color: inherit; text-decoration: none; font-size: 0.70rem; } /* Sidebar posts names font size */
 .post-sidebar .ps-post a:hover { text-decoration: underline; }
 
 /* Responsive: stack on narrow viewports */
@@ -63,3 +63,8 @@
   .layout--post .custom-sidebar, .layout--home .custom-sidebar { position: relative !important; top: auto; margin-left: 0 !important; }
 }
 
+
+#main {
+  max-width: none !important;
+  padding: 0 3rem !important;
+}
