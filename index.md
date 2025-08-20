@@ -4,6 +4,9 @@ layout: home
 title: Home
 ---
 
+<div class="page-with-sidebar">
+  <div class="content-area">
+
 ## Blog Posts
 
 <ul>
@@ -13,5 +16,14 @@ title: Home
   </li>
 {%- endfor -%}
 </ul>
+
+  </div>
+
+  <div class="custom-sidebar-wrapper">
+    <div class="custom-sidebar">
+      {% include sidebar.html %}
+    </div>
+  </div>
+</div>
 
 

@@ -1,5 +1,6 @@
-/* Post page layout */
-.layout--post .page-with-sidebar {
+/* Unified sidebar layout for post and home pages */
+.layout--post .page-with-sidebar,
+.layout--home .page-with-sidebar {
   display: flex !important;
   margin: 0 auto !important;
   width: 100% !important;
@@ -8,56 +9,34 @@
   flex-direction: row !important;
 }
 
-.layout--post .content-area {
+.layout--post .content-area,
+.layout--home .content-area {
   flex: 1 1 auto !important;
   min-width: 0 !important;
   max-width: calc(100% - 350px) !important;
 }
 
-.layout--post .custom-sidebar-wrapper {
+.layout--post .custom-sidebar-wrapper,
+.layout--home .custom-sidebar-wrapper {
   flex: 0 0 300px !important;
   position: relative !important;
   margin-left: 2rem !important;
 }
 
-.layout--post .custom-sidebar {
+.layout--post .custom-sidebar,
+.layout--home .custom-sidebar {
   position: sticky !important;
   top: 2em !important;
   width: 300px !important;
 }
 
-/* Home page layout and sidebar */
-.layout--home .archive {
-  margin-left: 350px !important;  /* Make space for sidebar */
-  max-width: calc(100% - 350px) !important;
-  padding-right: 2rem !important;
-}
-
-.layout--home .sidebar.sticky {
-  position: sticky !important;
-  top: 2em !important;
-  float: left !important;
-  width: 300px !important;
-  margin-left: 2rem !important;
-}
-
-/* Home page content and spacing */
-.layout--home .page__content {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Fix for YAML front matter */
+/* Fix for YAML front matter on home */
 .layout--home .archive > hr,
 .layout--home .archive > p:first-of-type {
   display: none !important;
 }
 
-.layout--home .archive__item-title {
-  margin-top: 0.5em !important;
-}
-
-/* Post sidebar styling */
+/* Post sidebar styling (used by both layouts) */
 .post-sidebar { font-size: 0.95rem; }
 .post-sidebar h3 { margin-top: 0; }
 .post-sidebar .ps-years, .post-sidebar .ps-months, .post-sidebar .ps-posts { list-style: none; margin: 0; padding-left: 0.5rem; }
@@ -67,60 +46,8 @@
 
 /* Responsive: stack on narrow viewports */
 @media (max-width: 880px) {
-  .layout--post .page-with-sidebar { display: block; }
-  .layout--post .custom-sidebar-wrapper { width: auto; }
-  .layout--post .custom-sidebar { position: relative; top: auto; margin-left: 0; }
-  .layout--home .archive { margin-right: 0 !important; }
-  .layout--home .sidebar.sticky { 
-    float: none !important;
-    width: auto !important;
-    margin: 2rem 0 !important;
-    padding: 0 !important;
-  }
-}
-
-/* Home page layout and sidebar */
-.layout--home .archive {
-  margin-right: 350px !important;  /* Make space for sidebar */
-}
-
-.layout--home .sidebar.sticky {
-  position: sticky !important;
-  top: 2em !important;
-  float: left !important;
-  width: 300px !important;
-  padding-right: 2rem !important;
-}
-
-/* Home page content and spacing */
-.layout--home .page__content {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-}
-
-.layout--home .archive__item-title {
-  margin-top: 0.5em !important;
-}
-
-/* Post sidebar styling */
-.post-sidebar { font-size: 0.95rem; }
-.post-sidebar h3 { margin-top: 0; }
-.post-sidebar .ps-years, .post-sidebar .ps-months, .post-sidebar .ps-posts { list-style: none; margin: 0; padding-left: 0.5rem; }
-.post-sidebar details summary { cursor: pointer; }
-.post-sidebar .ps-post a { color: inherit; text-decoration: none; }
-.post-sidebar .ps-post a:hover { text-decoration: underline; }
-
-/* Responsive: stack on narrow viewports */
-@media (max-width: 880px) {
-  .layout--post .page-with-sidebar { display: block; }
-  .layout--post .custom-sidebar-wrapper { width: auto; }
-  .layout--post .custom-sidebar { position: relative; top: auto; margin-left: 0; }
-  .layout--home .archive { margin-right: 0 !important; }
-  .layout--home .sidebar.sticky { 
-    float: none !important;
-    width: auto !important;
-    margin: 2rem 0 !important;
-    padding: 0 !important;
-  }
+  .layout--post .page-with-sidebar, .layout--home .page-with-sidebar { display: block !important; }
+  .layout--post .custom-sidebar-wrapper, .layout--home .custom-sidebar-wrapper { width: auto !important; }
+  .layout--post .custom-sidebar, .layout--home .custom-sidebar { position: relative !important; top: auto; margin-left: 0 !important; }
 }
 
