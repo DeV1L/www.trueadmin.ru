@@ -1,0 +1,5 @@
+# Local dev overrides: use gem-based theme for local builds and no remote-theme plugin
+theme: minimal-mistakes-jekyll
+baseurl: ""
+plugins:
+  - jekyll-include-cache

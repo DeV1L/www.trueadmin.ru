@@ -1,0 +1,31 @@
+<!-- Post sidebar: grouped by year -> month -> posts -->
+<nav class="post-sidebar">
+  <h3>Posts</h3>
+  {% assign years = site.posts | sort: 'date' | reverse | group_by_exp: "post", "post.date | date: '%Y'" %}
+  <ul class="post-sidebar-years">
+  {% for year in years %}
+    {% assign year_count = year.items | size %}
+    <li class="ps-year">
+      <details open>
+        <summary>{{ year.name }} ({{ year_count }})</summary>
+        <ul class="ps-months">
+          {% assign months = year.items | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
+          {% for month in months %}
+            {% assign month_count = month.items | size %}
+            <li class="ps-month">
+              <details>
+                <summary>{{ month.items[0].date | date: "%B" }} ({{ month_count }})</summary>
+                <ul class="ps-posts">
+                  {% for p in month.items | sort: 'date' | reverse %}
+                    <li class="ps-post"><a href="{{ p.url | relative_url }}">{{ p.title | truncate: 60 }}</a></li>
+                  {% endfor %}
+                </ul>
+              </details>
+            </li>
+          {% endfor %}
+        </ul>
+      </details>
+    </li>
+  {% endfor %}
+  </ul>
+</nav>
