@@ -4,8 +4,6 @@ layout: default
 title: Home
 ---
 
-{% include sidebar.html %}
-
 ## Blog Posts
 
 <ul>
