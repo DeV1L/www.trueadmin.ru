@@ -49,10 +49,16 @@ spec:
     args: [ "--target", "1", "--mount", "--uts", "--ipc", "--net", "--pid", "--", "bash", "-l" ]
 ```
 ###  Run the pod
-`kubectl apply -f .\helper.yaml`  
+```shell
+kubectl apply -f .\helper.yaml
+```
 
 #  Attach to the pod
-`kubectl attach helper -i`  
+```shell
+kubectl attach helper -i
+``` 
 
 #  Delete pod after you finish
-`kubectl delete pod/helper`
+```shell
+`kubectl delete pod/helper
+```
