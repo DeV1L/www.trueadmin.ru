@@ -2,11 +2,12 @@
 .layout--post .page-with-sidebar,
 .layout--home .page-with-sidebar {
   display: flex !important;
-  margin: 0 auto !important;
+  margin: 2rem auto 0 !important;
   width: 100% !important;
   padding: 0 !important;
   gap: 2rem !important;
   flex-direction: row !important;
+  margin-top: 2rem;
 }
 
 .layout--post .content-area,
@@ -71,7 +72,7 @@
 }
 
 .sidebar-author {
-  text-align: center;
+  text-align: left;
 }
 
 .author__avatar {
