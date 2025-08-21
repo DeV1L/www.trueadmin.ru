@@ -3,10 +3,7 @@ title: "VSTS / Azure DevOps tricks"
 date: 2018-09-21
 ---
 
-###  VSTS (Azure DevOps) tricks. Как посмотреть мои комиты за месяц?
-
-  
-
+#  VSTS (Azure DevOps) tricks. Как посмотреть мои комиты за месяц?
 
 ###  Вопрос
 
@@ -30,10 +27,10 @@ $Version = "4.1"
 $Repos = Invoke-RestMethod -Uri "https://dev.azure.com/$Instance/$Project//_apis/git/repositories?$Version" -Headers @{Authorization=("Basic {0}" -f $base64authinfo)} -Method Get -ContentType “application/json”
 
 foreach ($_ in $Repos.value.name)
-{
-$Commits = Invoke-RestMethod -Uri "https://dev.azure.com/$Instance/$Project/_apis/git/repositories/$_/commits?searchCriteria.author=$author&searchCriteria.toDate=$toDate&searchCriteria.fromDate=$fromDate&api-version=$Version" -Headers @{Authorization=("Basic {0}" -f $base64authinfo)} -Method Get -ContentType “application/json”
-$Commits | ConvertTo-Json
-}
+    {
+        $Commits = Invoke-RestMethod -Uri "https://dev.azure.com/$Instance/$Project/_apis/git/repositories/$_/commits?searchCriteria.author=$author&searchCriteria.toDate=$toDate&searchCriteria.fromDate=$fromDate&api-version=$Version" -Headers @{Authorization=("Basic {0}" -f $base64authinfo)} -Method Get -ContentType “application/json”
+        $Commits | ConvertTo-Json
+    }
 ```
 
 Результат будет выглядеть так.  
