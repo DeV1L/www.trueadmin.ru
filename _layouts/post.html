@@ -3,17 +3,20 @@ layout: default
 ---
 
 <div id="main" class="page-with-sidebar">
+  <div class="custom-bio-sidebar-wrapper">
+    {% raw %}{% include bio_sidebar.html %}{% endraw %}
+  </div>
   <div class="content-area">
     <article class="post h-entry">
       <div class="post-content e-content">
-        {{ content }}
+        {% raw %}{{ content }}{% endraw %}
       </div>
     </article>
   </div>
 
   <div class="custom-sidebar-wrapper">
     <div class="custom-sidebar">
-      {% include sidebar.html %}
+      {% raw %}{% include sidebar.html %}{% endraw %}
     </div>
   </div>
 </div>

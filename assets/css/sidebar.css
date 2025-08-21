@@ -13,14 +13,12 @@
 .layout--home .content-area {
   flex: 1 1 auto !important;
   min-width: 0 !important;
-  max-width: calc(100% - 335px) !important;
 }
 
 .layout--post .custom-sidebar-wrapper,
 .layout--home .custom-sidebar-wrapper {
   flex: 0 0 300px !important;
   position: relative !important;
-  margin-left: 2rem !important;
 }
 
 .layout--post .custom-sidebar,
@@ -34,12 +32,10 @@
 .layout--home .sidebar {
   float: right !important;
   width: 300px !important;
-  margin-left: 2rem !important;
   padding-left: 2rem !important;
 }
 
 .layout--home .archive {
-  max-width: calc(100% - 335px) !important;
 }
 
 /* Fix for YAML front matter on home */
@@ -67,4 +63,32 @@
 #main {
   max-width: none !important;
   padding: 0 5rem !important;
+}
+
+/* Bio Sidebar Styles */
+.custom-bio-sidebar-wrapper {
+  flex: 0 0 200px; /* Adjust width as needed */
+}
+
+.sidebar-author {
+  text-align: center;
+}
+
+.author__avatar {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.author__name {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.author__bio {
+  font-size: 0.9rem;
+  color: #666;
 }
