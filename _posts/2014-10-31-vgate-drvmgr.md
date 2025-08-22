@@ -6,9 +6,9 @@ date: 2014-10-31
 После установки в режиме шлюза vGate радостно начинает блокировать весь трафик на внешнем сетевом интерфейсе, кроме необходимого для соединения клиента с сервером авторизации.  
 
 
-[![](images/1.png)](images/1.png)
+![1.png]({{ '/images/1.png' | absolute_url }})
 
-[![](images/2.jpg)](images/2.jpg)
+![2.jpg]({{ '/images/2.jpg' | absolute_url }})
 
   
 
@@ -17,7 +17,7 @@ date: 2014-10-31
   
 
 
-[![](images/3.jpg)](images/3.jpg)
+![3.jpg]({{ '/images/3.jpg' | absolute_url }})
 
   
 
@@ -42,7 +42,7 @@ date: 2014-10-31
   
 
 
-[![](images/4.jpg)](images/4.jpg)
+![4.jpg]({{ '/images/4.jpg' | absolute_url }})
 
   
 
@@ -60,7 +60,7 @@ date: 2014-10-31
   
 
 
-[![](images/5.jpg)](images/5.jpg)
+![5.jpg]({{ '/images/5.jpg' | absolute_url }})
 
   
   
@@ -81,8 +81,3 @@ date: 2014-10-31
     
     
     "C:\Program Files\vGate\drvmgr.exe" d 0x3d0027ff
-    
-
-  
-  
-

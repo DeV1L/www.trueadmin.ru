@@ -35,4 +35,4 @@ foreach ($_ in $Repos.value.name)
 
 Результат будет выглядеть так.  
 
-[![]({{ '/images/Result.jpg' | relative_url }})]({{ '/images/Result.jpg' | relative_url }})  
+![Result.jpg]({{ '/images/Result.jpg' | absolute_url }})  

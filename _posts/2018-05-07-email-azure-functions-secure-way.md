@@ -24,12 +24,12 @@ date: 2018-05-07
 ###  Настройка Function App
 Открываем:**Function App - > Platform features -> NETWORKING -> Managed service identity**  
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgn_GQqvB9tsJ5ZSaL-6UKZnCsXnTTTgJvRvpHS_AAz6FwaIyxjcQVqmxRg9Xv8MrR3_045T7-HuplbC6V1E4T7SCS3YQaJngS0G6aBDA5RedcF5M4c-QG76da-iIyskgPcjrlQ2A-_myPN/s640/Platform+features.jpg)](images/Platform+features.jpg)
+![Platform features.jpg]({{ '/images/Platform+features.jpg' | absolute_url }})
 
   
 Включаем **"Register with Azure Active Directory"**  
   
-[![](images/Register+with+Azure+Active+Directory.jpg)](images/Register+with+Azure+Active+Directory.jpg)
+![Register with Azure Active Directory.jpg]({{ '/images/Register+with+Azure+Active+Directory.jpg' | absolute_url }})
 
 Это позволить приложению запрашивать access token для получения доступа к другим ресурсам Azure (в нашем случае Key Vault). Подробнее [тут](https://docs.microsoft.com/en-us/azure/app-service/app-service-managed-service-identity).  
   
@@ -38,10 +38,10 @@ date: 2018-05-07
   
 **Key vault - > Secrets -> Generate/Import**  
 
-[![](images/sender+login.jpg)](images/sender+login.jpg)
+![sender login.jpg]({{ '/images/sender+login.jpg' | absolute_url }})
 
 
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEijs5HTl_hcWKC1fRgH7SYcm9xlp8NVXSsQuFVCE90VnaUDDhnXGJgG5RopYPCRXMuBdoIwIAbWq66idLZgvnI3443_WXQACKCMamnofQvbPXOFD3RUu0Nge_1Ta13IXYwnLmkWpHTaLa4Y/s640/sender+password.jpg)](images/sender+password.jpg)
+![sender password.jpg]({{ '/images/sender+password.jpg' | absolute_url }})
 
   
 Разрешаем нашему Function App запрашивать эти логин и пароль. Для этого идём в **Key vault - > Access policies -> Add new  **и выбираем:  
@@ -49,18 +49,18 @@ date: 2018-05-07
   * **Secret permissions** : Get, List
   * **Select principal** : test-azurefunctions-notifications
 
-[![](images/Access+policy.jpg)](images/Access+policy.jpg)
+![Access policy.jpg]({{ '/images/Access+policy.jpg' | absolute_url }})
 
 ###  Отправка уведомлений
 Проверим, что мы можем использовать сохранённые учётные данные.  
   
 Приведу вариант реализации на PowerShell. Примеры для других языков можно посмотреть в [документации](https://docs.microsoft.com/en-us/azure/app-service/app-service-managed-service-identity#obtaining-tokens-for-azure-resources) Microsoft.  
   
-[![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg8zoLZ-jwjg1qpeGVCAvfirGGW_nhVrcPlwBXyNYwP89i3OvmZKshBhA43BAFrU7ywq3WHHCFBFa8UMz6TFQR2ykw-ey3hk4cYtNtNISb0QFlPAu3LAMtpiNZj7PaurbkxxAWn6QPZ1Sxe/s640/Function.jpg)](images/Function.jpg)
+![Function.jpg]({{ '/images/Function.jpg' | absolute_url }})
 
   
 Результат будет выглядеть примерно так:  
-[![]({{ '/images/Email.jpg' | relative_url }})]({{ '/images/Email.jpg' | relative_url }})
+![Email.jpg]({{ '/images/Email.jpg' | absolute_url }})
 
   
 Код на PowerShell.  
