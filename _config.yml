@@ -1,8 +1,8 @@
 remote_theme: mmistakes/minimal-mistakes
 title: Thinking out loud
 description: My thoughts and experiences.
-baseurl: "/www.trueadmin.ru"
-url: "https://dev1l.github.io"
+baseurl: ""
+url: "https://evgeniy.tech"
 plugins:
   - jekyll-remote-theme
   - jekyll-include-cache
