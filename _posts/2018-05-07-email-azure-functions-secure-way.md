@@ -1,9 +1,9 @@
 ---
-title: "Email from Azure Functions — secure way"
+title: "Email from Azure Functions (secure way)"
 date: 2018-05-07
 ---
 
-# Email from Azure Functions — secure way
+# Email from Azure Functions (secure way)
   
 [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/) \- очень удобный инструмент для автоматизации каких-либо задач. Как-только автоматизация настроена - сразу возникает вопрос: как получать уведомления о результатах? Самое логичное решение - использовать электронную почту для отправки оповещений.  
 Как делать это безопасно и бесплатно расскажу ниже.  
