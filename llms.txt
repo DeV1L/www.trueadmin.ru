@@ -1,0 +1,17 @@
+---
+layout: null
+permalink: /llms.txt
+sitemap: false
+---
+# {{ site.title }}
+
+> {{ site.description }} Personal technical blog by {{ site.author.name }} ({{ site.author.bio | split: "." | first }}). Topics: SRE, DevOps, Azure, Kubernetes, Zabbix, Windows and Linux administration, security. 
+
+- Full text of all posts: {{ '/llms-full.txt' | absolute_url }}
+- RSS/Atom feed: {{ '/feed.xml' | absolute_url }}
+- Author: [GitHub](https://github.com/DeV1L), [LinkedIn](https://www.linkedin.com/in/esavchenko/)
+
+## Posts
+{% for post in site.posts %}
+- [{{ post.title }}]({{ post.url | absolute_url }}): {{ post.date | date: "%Y-%m-%d" }}
+{%- endfor %}

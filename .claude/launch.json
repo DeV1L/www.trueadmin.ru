@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "jekyll",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "export GEM_HOME=$HOME/.gems PATH=$HOME/.gems/bin:$PATH JEKYLL_NO_BUNDLER_REQUIRE=true && exec jekyll serve --config _config.yml,_config_dev.yml --livereload"
+      ],
+      "port": 4000
+    }
+  ]
+}

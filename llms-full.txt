@@ -1,0 +1,19 @@
+---
+layout: null
+permalink: /llms-full.txt
+sitemap: false
+---
+# {{ site.title }}
+
+> {{ site.description }} Personal technical blog by {{ site.author.name }}. Full text of all posts, newest first.
+{% for post in site.posts %}
+
+---
+
+## {{ post.title }}
+
+URL: {{ post.url | absolute_url }}
+Date: {{ post.date | date: "%Y-%m-%d" }}
+
+{{ post.content | strip_html | replace: "&lt;", "<" | replace: "&gt;", ">" | replace: "&quot;", '"' | replace: "&#39;", "'" | replace: "&amp;", "&" | strip }}
+{%- endfor %}
