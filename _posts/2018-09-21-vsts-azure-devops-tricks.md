@@ -3,8 +3,6 @@ title: "VSTS / Azure DevOps tricks"
 date: 2018-09-21
 ---
 
-#  VSTS (Azure DevOps) tricks. Как посмотреть мои комиты за месяц?
-
 ###  Вопрос
 
 `Есть способ в VSTS сделать query и вытащить мои комиты за месяц?`

@@ -2,8 +2,6 @@
 title: "Запуск службы от имени Managed Service Accounts (MSA)"
 date: 2017-01-19
 ---
-# Запуск службы от имени Managed Service Accounts (MSA)
-
 Для запуска службы от имени [MSA](https://technet.microsoft.com/ru-ru/library/dd378925(v=ws.10).aspx) необходимо:  
   
 **1)**  **Создать MSA (объект AD) в соответствующем домене**  

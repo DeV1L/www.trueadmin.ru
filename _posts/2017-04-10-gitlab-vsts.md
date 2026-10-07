@@ -3,8 +3,6 @@ title: "Import from GitLab to VSTS"
 date: 2017-04-10
 ---
 
-# Import from GitLab to VSTS
-
 В VSTS есть возможность [импортировать](https://www.visualstudio.com/en-us/docs/git/import-git-repository) Git репозиторий прямо из веб-интерфейса  
 
 

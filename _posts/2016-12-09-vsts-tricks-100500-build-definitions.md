@@ -1,8 +1,7 @@
 ---
-title: "VSTS tricks. Как изменить 100500 Build Definitions за один ра"
+title: "VSTS tricks. Как изменить 100500 Build Definitions за один раз"
 date: 2016-12-09
 ---
-# VSTS tricks. Как изменить 100500 Build Definitions за один ра
 ###  **Вопрос**
 
 Допустим Вы хотите изменить какой-то общий параметр сразу во всех Build Definitions. Например, путь для выгрузки артефактов.  

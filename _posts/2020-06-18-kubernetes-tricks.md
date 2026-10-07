@@ -3,7 +3,6 @@ title: "Kubernetes tricks. How to get a shell into a Kubernetes Node?"
 date: 2020-06-18
 ---
 
-# Kubernetes tricks. How to get a shell into a Kubernetes Node?
 ##  **Question**
 
 I don't have SSH access to Kubernnetes nodes. How I can get into?  
@@ -54,12 +53,12 @@ spec:
 kubectl apply -f .\helper.yaml
 ```
 
-#  Attach to the pod
+###  Attach to the pod
 ```shell
 kubectl attach helper -i
-``` 
+```
 
-#  Delete pod after you finish
+###  Delete pod after you finish
 ```shell
-`kubectl delete pod/helper
+kubectl delete pod/helper
 ```
