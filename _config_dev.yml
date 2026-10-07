@@ -3,6 +3,8 @@ theme: minimal-mistakes-jekyll
 baseurl: ""
 plugins:
   - jekyll-include-cache
+  - jekyll-feed
+  - jekyll-sitemap
 
 # Ensure posts use our `post` layout locally so the sidebar is injected
 defaults:

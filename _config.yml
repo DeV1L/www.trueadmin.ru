@@ -3,9 +3,29 @@ title: Thinking out loud
 description: My thoughts and experiences.
 baseurl: ""
 url: "https://evgeniy.tech"
+
+# Default image used for social sharing cards (Open Graph / Twitter)
+og_image: "/assets/og-image.png"
+logo: "/assets/favicon-32.png"
+
+# Site author (used for meta tags and structured data)
+author:
+  name: "Evgeniy Savchenko"
+  bio: "Platform Engineer, SRE. Digital nomad 💻🌍🌄"
+  avatar: "/images/bio_photo_01.jpg"
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/DeV1L"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/esavchenko/"
+
 plugins:
   - jekyll-remote-theme
   - jekyll-include-cache
+  - jekyll-feed
+  - jekyll-sitemap
 
 # Ensure posts use our `post` layout so the sidebar is injected on production builds
 defaults:

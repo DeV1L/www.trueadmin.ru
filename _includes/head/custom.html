@@ -4,3 +4,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/favicon-16.png' | relative_url }}">
 <link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/apple-touch-icon.png' | relative_url }}">
+
+<!-- Twitter large-image card (title/description fall back to Open Graph tags) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ page.header.og_image | default: site.og_image | absolute_url }}">
