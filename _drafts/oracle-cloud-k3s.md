@@ -15,7 +15,7 @@ DRAFT 1. Publishing notes:
   3. oracle-cloud-k3s-pulumi.png: Draw.io, based on the flowchart in docs/PULUMI.md.
 -->
 
-## Two tiny VMs
+## Introduction
 
 Oracle Cloud has an Always Free tier. The best part of it is two always free super-tiny `VM.Standard.E2.1.Micro` instances. Each has one CPU (actually, [OCPU](https://blogs.oracle.com/cloud-infrastructure/vcpu-and-ocpu-pricing-information)) and 1 GB of RAM.
 
