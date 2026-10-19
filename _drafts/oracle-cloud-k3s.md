@@ -42,19 +42,20 @@ Everything is inside the Always Free limits. The bill is zero.
 
 The code is on GitHub: [DeV1L/oracle-cloud-k3s](https://github.com/DeV1L/oracle-cloud-k3s).
 
-## How it fits together
-
 ![Infrastructure](/images/oracle-cloud-k3s-infra.png)
 
-Traffic from the internet reaches the reserved public IP on the load balancer. The load balancer sends HTTP and HTTPS to both nodes, where Traefik takes over. kubectl goes to port 6443 and reaches the server node only.
+Traffic from the internet reaches the reserved public IP on the load balancer. The load balancer sends HTTP and HTTPS to both nodes, where Traefik takes over. 
+Traffic from kubectl goes to port 6443 and reaches the server node only.
 
-The reserved IP sits on the load balancer, not on a node. When a node is replaced, the IP and the DNS name stay the same. A NAT gateway is not free, so each node gets its own ephemeral public IP for outbound traffic and SSH.
+When a node is replaced, the IP and the DNS name stay the same. Each node gets its own ephemeral public IP for outbound traffic and SSH.
 
 ## The Pulumi program
 
+The program has one stack, `default`. Every account-specific value is in `Pulumi.default.yaml`: the region, the compartment, the availability domain and the SSH public key. The other values have defaults.
+
 ![The Pulumi program](/images/oracle-cloud-k3s-pulumi.png)
 
-The program has one stack, `default`. Every account-specific value is in `Pulumi.default.yaml`: the region, the compartment, the availability domain and the SSH public key. The main program reads the configuration once, creates a random join token and then four components:
+The entry point is `__main__.py` It reads the configuration, creates a random join token and then four components:
 
 ```python
 network = NetworkComponent("network", config)
@@ -69,56 +70,57 @@ cluster = K3sClusterComponent(
 )
 ```
 
-Each component is a `pulumi.ComponentResource` in its own module. It owns one area of the infrastructure: the network, the vault, the load balancer or the cluster. The child resources get `parent=self`, so the preview and the state show them grouped under their component. The main program connects the components through their outputs. The subnet ID goes to the load balancer and the cluster. The reserved IP goes to the cluster.
+Each component is a `pulumi.ComponentResource` in its own module. It owns one area of the infrastructure: the network, the vault, the load balancer or the cluster. The child resources get `parent=self`, so `pulumi preview` shows them as a tree under their component. The components connect only through outputs. The network gives the subnet ID, the load balancer gives the reserved IP.
 
-**Configuration.** One function reads the stack configuration and returns a typed `ProjectConfig` object. The components get it as an argument and never read the configuration on their own. A value lives in one of three places. The required keys are different for every account. The optional keys, like the DNS name of the API, change what the program does when they are set. Everything else is a `DEFAULT_*` constant: the k3s version, the CIDRs, the private IPs, the swap size. A key in the stack file overrides the default.
+**Configuration.** One function reads the stack configuration and returns a typed `ProjectConfig` object. The components get this object as an argument and do not read the stack configuration themselves. A value is in one of three places. The required keys are different for every account. The optional keys change the behaviour when they are set, for example the DNS name of the API. The other values are `DEFAULT_*` constants: the k3s version, the CIDRs, the private IPs, the swap size. A key in the stack file overrides a default.
 
-**The join token.** The token is a `RandomPassword` resource. The Python program only declares it. The Pulumi engine creates it later, so the value does not exist while the program runs. What the program holds is an `Output[str]`. An `Output` carries three things: the value, once it is known, the dependency on the resource that makes it, and the secret flag. The same token goes into the Vault secret and into the cloud-init of both nodes, and Pulumi keeps it out of the logs.
+**The join token.** The token is a `RandomPassword` resource. The Python code only declares it. The Pulumi engine creates it later, so the value does not exist while the program runs. The program holds an `Output[str]` instead. An `Output` carries the value, once it is known, the dependency on the resource that produces it, and a secret flag. The same `Output` goes into the Vault secret and into the cloud-init of both nodes. Pulumi treats it as a secret: it hides the value in the logs and encrypts it in the state.
 
-**Cloud-init.** The templates `server.yaml` and `agent.yaml` have placeholders in the form `@{name}`. The cluster component fills them inside `Output.all(join_token, public_ip).apply(...)`, encodes the result in Base64 and passes it to OCI as `user_data`. The order matters here. Pulumi creates the reserved IP before the nodes, so the server node can put the public IP and the DNS name into the API certificate at the first boot.
+**Cloud-init.** The templates `server.yaml` and `agent.yaml` have placeholders in the form `@{name}`. The cluster component fills them inside `Output.all(join_token, public_ip).apply(...)`, encodes the result in Base64 and passes it to OCI as `user_data`. The order of creation matters. Pulumi creates the reserved IP before the nodes, so the server node puts the public IP and the DNS name into the API certificate at the first boot.
 
-The cloud-init writes the k3s configuration and one bootstrap script, then runs the script. The script makes a 2 GB swap file, removes two iptables rules of the Ubuntu image, stops services the node does not need and installs the pinned k3s version. On the server node, the cloud-init also drops a Traefik configuration into the k3s manifests folder, and the script writes the kubeconfig. The script is safe to run twice. To test a change, I copy the new script to a live node and run it there.
+The cloud-init writes the k3s configuration and one bootstrap script, then runs the script. The script creates a 2 GB swap file, removes two iptables rules of the Ubuntu image, stops services the node does not need and installs the pinned k3s version. On the server node, the script also writes the kubeconfig, and the cloud-init adds a Traefik configuration to the k3s manifests folder. The script is idempotent. To test a change, I copy the new script to a live node and run it there. The node does not need a rebuild.
 
-**Resource options.** A few options protect the cluster from the program itself:
+**Resource options.** A few options protect the cluster from accidental changes:
 
-- `protect=True` on the instances. Pulumi refuses to delete a node by accident.
-- `ignore_changes` on the image and the metadata. A new image or a new cloud-init does not replace a node. OCI rejects such changes anyway, and cloud-init runs only once.
+- `protect=True` on the instances. Pulumi does not delete a node by accident.
+- `ignore_changes` on the image and the metadata. A new image or a new cloud-init does not replace the node. OCI rejects such changes anyway, and cloud-init runs only once.
 - `delete_before_replace`. The fixed private IP and the limit of two instances leave no room for a second instance during a replacement.
-- `refresh: always` in `Pulumi.yaml`. Every preview sees what was deleted by hand in the console.
+- `refresh: always` in `Pulumi.yaml`. Every preview sees the resources that were deleted by hand in the console.
 
-## GitHub Actions
+## Deployment
 
-The repository is the source of truth, so the deployment runs from it. One workflow has two jobs. `pulumi preview` runs on every pull request and every push to `main`. `pulumi up` runs only on a manual start, with an input that must be set to true. A concurrency group allows one run at a time. A queued run waits and is not cancelled.
+There are two ways to deploy the stack. The first is a local `pulumi up`. The second is the GitHub Actions workflow in the repository. Both use the same state, so they can be mixed.
 
-The Pulumi state is in an OCI Object Storage bucket, through its S3-compatible API. The workflow gets the Customer Secret Key as `AWS_*` secrets and the API signing key as a repository secret. One detail: Pulumi CLI 3.256 and older cannot log in to this bucket. The workflow pins 3.268.
+The workflow has two jobs. `pulumi preview` runs on every pull request and every push to `main`. `pulumi up` runs only on a manual start, with the `apply` input set to true. A concurrency group allows one run at a time. A queued run waits and is not cancelled.
+
+The Pulumi state is in an OCI Object Storage bucket, through its S3-compatible API. The workflow gets the Customer Secret Key as `AWS_*` secrets and the API signing key as a repository secret.
 
 ## Inside Always Free
 
-The tier has limits that shape the design. This is how the project uses them:
+The limits of the tier shaped the design:
 
-- Two micro instances, only in availability domain AD-1: the two nodes.
+- Two micro instances, only in availability domain AD-1.
 - One reserved public IP: the load balancer.
 - One network load balancer: the entry point.
 - One vault of type DEFAULT with software-protected keys: the join token and the kubeconfig. A virtual private vault and HSM keys cost money.
 - 200 GB of block storage: the two boot volumes.
-- A NAT gateway is not free, so there is none.
+- No NAT gateway. It is not free, so each node has an ephemeral public IP instead.
 
-## Notes from running it
+## Gotchas
 
-A few facts about OCI and k3s on 1 GB that are worth knowing before the first `pulumi up`:
+A few facts about OCI and k3s on 1 GB that are good to know before the first `pulumi up`:
 
 - Capacity for the micro shape is not guaranteed. A deleted instance can take days to come back. The repository has a script that checks the capacity. Run it before any replacement.
 - OCI rejects changes to `user_data` and SSH keys on a live instance. A cloud-init change applies to new nodes only.
 - A deleted vault waits 7 to 30 days for its deletion and still counts against the limit of one. A rebuild of the cluster keeps the vault.
 - The Ubuntu image rejects forwarded traffic with two iptables rules. Without the fix in the bootstrap script, pods cannot talk to each other.
-- The server node uses about 600 MB of its 1 GB and some swap. After a replacement, the system pods can land on the server node. Move them to the agent node.
-- Let's Encrypt allows 5 identical certificates in 7 days. The certificates live on a volume on the node of the Traefik pod, and a replacement of that node requests them again. Test rebuilds use the staging server.
+- The server node uses about 600 MB of its 1 GB and some swap. The scheduler does not see this. The control plane is not a pod, and the kubelet reserves only 256 MiB for the system and k3s, so both nodes report the same 648 MiB as allocatable. The system pods request little memory or none at all: CoreDNS and metrics-server request 70 MiB each, Traefik and the local-path provisioner request nothing. After a replacement, the scheduler can place all of them on the server node. The node then swaps and gets slow. Move the pods to the agent node.
 
 ## What runs on it
 
-The cluster does real work. It runs kindergarten-email-checker, a small Python service. It reads the emails that a kindergarten sends in Spanish, writes a short summary in Russian with an LLM, and posts it to a private Telegram group. One container, one Helm chart, no database. It fits in the memory budget.
+The cluster does real work. It runs kindergarten-email-checker, a small Python service. It reads the emails that a kindergarten sends in Spanish, writes a short summary in Russian with an LLM, and posts the summary to a private Telegram group. One container, one Helm chart, no database. It fits into the memory budget.
 
-The next post is about that tool and how it got onto this cluster. A couple more small tools of this kind will follow. The honest limit: anything that needs more than a few hundred MB of RAM does not fit here.
+The next post is about that tool and how it got onto this cluster. A couple more small tools of this kind will follow. The limit is clear: anything that needs more than a few hundred MB of RAM does not fit here.
 
 ## Try it
 
@@ -127,6 +129,8 @@ The next post is about that tool and how it got onto this cluster. A couple more
 3. Run `pulumi up`, or start the GitHub Actions workflow.
 
 The full guide, with every command, is in `docs/SETUP.md` in the repository.
+
+Keep building!
 
 - Repository: https://github.com/DeV1L/oracle-cloud-k3s
 - Always Free resources: https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm
