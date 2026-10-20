@@ -11,6 +11,8 @@ DRAFT 1. Publishing notes:
 - Medium has no tables and no mermaid. The post uses bullet lists and images only.
 - Images in images/:
   1. oracle-cloud-k3s-kubectl-get-nodes.png: screenshot of `kubectl get nodes`. Hero image.
+  3. Screenshots: oracle-cloud-k3s-pulumi-preview.png, oracle-cloud-k3s-pulumi-stack-output.jpg,
+     oracle-cloud-k3s-gh-pipeline.png.
   2. oracle-cloud-k3s-infra-light.png and oracle-cloud-k3s-pulumi-light.png: icon style, light.
      Sources: the .drawio file with the same name. Export from VS Code (Draw.io extension) as PNG at
      200 % with a 20 px border.
@@ -22,9 +24,9 @@ Oracle Cloud has an Always Free tier. The best part of it is two always free sup
 
 But what can you do with two 1 GB machines?
 
-Of course, turn them into a Kubernetes cluster!  😎 
+Of course, turn them into a Kubernetes cluster! 😎
 
-I wrote a Pulumi project that spins up a two-node k3s cluster on Oracle Cloud, with all cloud resources it needs.
+I wrote a Pulumi project that spins up a two-node k3s cluster on Oracle Cloud, with all the cloud resources it needs.
 
 ![kubectl get nodes](/images/oracle-cloud-k3s-kubectl-get-nodes.png)
 
@@ -45,8 +47,7 @@ The code is on GitHub: [DeV1L/oracle-cloud-k3s](https://github.com/DeV1L/oracle-
 
 ![Infrastructure](/images/oracle-cloud-k3s-infra-light.png)
 
-Traffic from the internet reaches the reserved public IP on the load balancer. The load balancer sends HTTP and HTTPS to both nodes, where Traefik takes over. 
-Traffic from kubectl goes to port 6443 and reaches the server node only.
+Traffic from the internet reaches the reserved public IP on the load balancer. The load balancer sends HTTP and HTTPS to both nodes, where Traefik takes over. Traffic from kubectl goes to port 6443 and reaches the server node only.
 
 If a node is rebuilt (replaced), the IP and the DNS name stay the same. Each node gets its own ephemeral public IP for outbound traffic and SSH.
 
@@ -62,14 +63,14 @@ The entry point is [`__main__.py`](https://github.com/DeV1L/oracle-cloud-k3s/blo
 network = NetworkComponent("network", config)
 vault = VaultComponent("vault", config, join_token=join_token.result)
 load_balancer = LoadBalancerComponent("lb", config, subnet_id=network.subnet_id)
-cluster = K3sClusterComponent("cluster", config, subnet_id=network.subnet_id, join_token=join_token.result, public_ip=load_balancer.ip_address,)
+cluster = K3sClusterComponent("cluster", config, subnet_id=network.subnet_id, join_token=join_token.result, public_ip=load_balancer.ip_address)
 ```
 
 Each component is a `pulumi.ComponentResource` in [its own module](https://github.com/DeV1L/oracle-cloud-k3s/tree/main/pulumi/components). It owns one area of the infrastructure: Network, Vault, Load Balancer, Cluster. The child resources get `parent=self`, so `pulumi preview` shows them as a tree under their component. The components connect only through outputs. The network gives the subnet ID, the load balancer gives the reserved IP.
 
 ![pulumi preview](/images/oracle-cloud-k3s-pulumi-preview.png)
 
-### A component example 
+### A component example
 
 The [load balancer component](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/pulumi/components/load_balancer.py) is a good example. It creates the entry point of the cluster. This is the shortened version:
 
@@ -138,19 +139,20 @@ class LoadBalancerComponent(pulumi.ComponentResource):
         )
 ```
 
-The first line of `__init__` tells Pulumi that a resource of type `oracle-cloud-k3s:loadbalancer:LoadBalancerComponent` exists. It is an entry in the state only. The entry is the parent of everything the component creates, so the resources form one group in the resource graph of the program. 
-The group has three effects: 
+The first line of `__init__` tells Pulumi that a resource of type `oracle-cloud-k3s:loadbalancer:LoadBalancerComponent` exists. It is an entry in the state only. The entry is the parent of everything the component creates, so the resources form one group in the resource graph of the program. The group has three effects:
+
 - The state and `pulumi preview` show the resources as a tree under the component;
-- The resource options of the component (i.e. `protect`) pass down to the children;
-- Children keep their identity as long as the parent keeps its name. 
+- The resource options of the component (for example `protect`) pass down to the children;
+- Children keep their identity as long as the parent keeps its name.
 
 The component creates two OCI resources and sets their properties:
-1) The reserved public IP;
-2) The network load balancer.
 
-The `PublicIp` objects need one extra option. When the load balancer takes the IP, OCI sets `private_ip_id` on the IP automatically, so Pulumi does not set this property. Without `ignore_changes`, the next `pulumi up` would reset the property and detach the IP from the load balancer. 
+1. The reserved public IP;
+2. The network load balancer.
 
-The method `_forward()` creates a backend set, one backend per node IP and a listener for one port. 
+The `PublicIp` object needs one extra option. When the load balancer takes the IP, OCI sets `private_ip_id` on the IP automatically, so Pulumi does not set this property. Without `ignore_changes`, the next `pulumi up` would reset the property and detach the IP from the load balancer.
+
+The method `_forward()` creates a backend set, one backend per node IP and a listener for one port.
 
 The component ends with `register_outputs()` and exports the public IP, which the cluster component gets as an input.
 
@@ -160,13 +162,13 @@ The stack configuration lives in `Pulumi.default.yaml`. The function `load_confi
 
 Settings come from one of three places:
 
-- **Required** keys (i.e. region, compartment, availability domain) in the stack file `Pulumi.default.yaml`.
-- **Optional** keys (i.e. DNS name) in the stack file `Pulumi.default.yaml`.
-- `DEFAULT_*` constants (i.e. k3s version, network ranges, swap size) in `config.py`. 
+- **Required** keys (for example region, compartment, availability domain) in the stack file `Pulumi.default.yaml`.
+- **Optional** keys (for example DNS name) in the stack file `Pulumi.default.yaml`.
+- `DEFAULT_*` constants (for example k3s version, network ranges, swap size) in `config.py`.
 
 ### k3s join token
 
-The join token is a shared secret with which the agent node joins the server node. It's declared as a `RandomPassword` resource. Pulumi generates it on the first `pulumi up`. The value is stored in the state encrypted, and stays the same on every later run.
+The join token is a shared secret with which the agent node joins the server node. It's declared as a `RandomPassword` resource. Pulumi generates it on the first `pulumi up`. The value is stored encrypted in the state and stays the same on every later run.
 
 Inside the program the value is an `Output[str]` with the secret flag. Pulumi passes it to the Vault secret and into the cloud-init of both nodes. It's shown as `[secret]` instead of the value in the preview and in the logs.
 
@@ -174,31 +176,30 @@ Inside the program the value is an `Output[str]` with the secret flag. Pulumi pa
 
 The templates [`server.yaml`](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/pulumi/templates/server.yaml) and [`agent.yaml`](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/pulumi/templates/agent.yaml) have `@{name}` placeholders. The [cluster component](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/pulumi/components/cluster.py) fills them inside `Output.all(join_token, public_ip).apply(...)` and passes the result to OCI as Base64 `user_data`.
 
-The cloud-init writes the k3s configuration and one bootstrap script, then runs it. The script creates a 2 GB swap file, removes two iptables rules of the Ubuntu image, stops unneeded services and installs the pinned k3s version. On the server node, the script also writes the kubeconfig, and the cloud-init adds the Traefik configuration. 
+The cloud-init writes the k3s configuration and one bootstrap script, then runs it. The script creates a 2 GB swap file, removes two iptables rules of the Ubuntu image, stops unneeded services and installs the pinned k3s version. On the server node, the script also writes the kubeconfig, and the cloud-init adds the Traefik configuration.
 
 ## Deployment
 
 There are two ways to deploy the stack:
-1) Run `pulumi up` locally.
+
+1. Run `pulumi up` locally.
 
 ![pulumi stack output](/images/oracle-cloud-k3s-pulumi-stack-output.jpg)
 
+2. Start the GitHub Actions workflow in the repository.
 
-2) The GitHub Actions workflow in the repository. 
-
-![pulumi stack output](/images/oracle-cloud-k3s-gh-pipeline.png)
-
+![GitHub Actions workflow](/images/oracle-cloud-k3s-gh-pipeline.png)
 
 Both use the same state in the OCI Object Storage bucket.
 
 The [GitHub Actions workflow](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/.github/workflows/pulumi.yml) has two jobs:
-- `pulumi preview` runs on every pull request and every push to `main`. 
-- `pulumi up` runs only on a manual start, with the `apply` input set to true. 
+
+- `pulumi preview` runs on every pull request and every push to `main`.
+- `pulumi up` runs only on a manual start, with the `apply` input set to true.
 
 A concurrency group allows one run at a time.
 
-Pulumi access tge OCI Object Storage bucket through its S3-compatible API. 
-The workflow gets the `Customer Secret Key` and  the `API signing key` from  repository secrets.
+Pulumi accesses the OCI Object Storage bucket through its S3-compatible API. The workflow gets the `Customer Secret Key` and the `API signing key` from repository secrets.
 
 ## Oracle Cloud Always Free limits
 
@@ -214,20 +215,19 @@ The limits of the Free Tier shaped the design:
 A few facts about OCI and k3s on 1 GB that are good to know before the first `pulumi up`:
 
 - Capacity for the micro shape is not guaranteed. The repository has [a script that checks the capacity](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/scripts/check-capacity.sh). Run it before any replacement.
-- OCI rejects changes to `user_data` and SSH keys on a live instance. So, applying change to cloud-init means nodes need to be recreated.
+- OCI rejects changes to `user_data` and SSH keys on a live instance. So a change to cloud-init means that the nodes must be recreated.
 - A deleted vault waits 7 to 30 days for its deletion and still counts against the limit of one. A rebuild of the cluster deliberately [keeps the vault](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/docs/OPERATIONS.md#rebuild-the-cluster-and-keep-the-vault).
 - The OCI Ubuntu image rejects forwarded traffic with iptables rules. It's fixed in the cloud-init scripts.
 
 ## Real world
 
-The cluster is pretty small, but it does real work. I placed their a couple of my personal experimental tools and chat-bots.
-The limit is clear: anything that needs more than a few hundred MB of RAM does not fit here.
+The cluster is pretty small, but it does real work. I run a couple of my personal experimental tools and chat bots there. The limit is clear: anything that needs more than a few hundred MB of RAM does not fit here.
 
-The next post will be about one of that tool.
+The next post will be about one of those tools.
 
 ## Try it out
 
-1. Register an OCI account: https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm
+1. Register an OCI account: https://signup.cloud.oracle.com/
 1. Clone the repository: https://github.com/DeV1L/oracle-cloud-k3s
 1. Create the OCI credentials: an API signing key and a Customer Secret Key.
 1. Put the region, the availability domain and the SSH public key into [`Pulumi.default.yaml`](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/pulumi/Pulumi.default.yaml).
