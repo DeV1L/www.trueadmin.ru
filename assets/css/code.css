@@ -1,0 +1,26 @@
+/* Inline code: a visible background and border, so names stand out from the text.
+   Code blocks (<pre>) keep the theme styling. */
+.post-content :not(pre) > code {
+  background: #eef2f7;
+  border: 1px solid #d9dfe7;
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  font-size: 0.85em;
+  color: #1f2937;
+}
+
+.post-content a > code {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* The theme pads inline code with non-breaking spaces. Drop them, the padding above is enough. */
+.post-content :not(pre) > code::before,
+.post-content :not(pre) > code::after {
+  content: none;
+}
+
+/* Headings inside a post: a clearly smaller h3. */
+.post-content h3 {
+  font-size: 1.4rem;
+}

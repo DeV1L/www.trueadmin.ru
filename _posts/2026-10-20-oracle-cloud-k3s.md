@@ -1,22 +1,7 @@
 ---
 title: "A free Kubernetes cluster on Oracle Cloud with k3s and Pulumi"
-date: 2026-10-19
+date: 2026-10-20
 ---
-
-<!--
-DRAFT 1. Publishing notes:
-- Medium subtitle: "Two 1 GB VMs from the Always Free tier, one Pulumi program, zero dollars."
-- Publish on evgeniy.tech first, then import into Medium (medium.com/p/import) so the canonical
-  URL points to the blog.
-- Medium has no tables and no mermaid. The post uses bullet lists and images only.
-- Images in images/:
-  1. oracle-cloud-k3s-kubectl-get-nodes.png: screenshot of `kubectl get nodes`. Hero image.
-  3. Screenshots: oracle-cloud-k3s-pulumi-preview.png, oracle-cloud-k3s-pulumi-stack-output.jpg,
-     oracle-cloud-k3s-gh-pipeline.png.
-  2. oracle-cloud-k3s-infra-light.png and oracle-cloud-k3s-pulumi-light.png: icon style, light.
-     Sources: the .drawio file with the same name. Export from VS Code (Draw.io extension) as PNG at
-     200 % with a 20 px border.
--->
 
 ## Introduction
 
@@ -168,9 +153,9 @@ Settings come from one of three places:
 
 ### k3s join token
 
-The join token is a shared secret with which the agent node joins the server node. It's declared as a `RandomPassword` resource. Pulumi generates it on the first `pulumi up`. The value is stored encrypted in the state and stays the same on every later run.
+The join token is a shared secret with which the agent node joins the server node. It is declared as a `RandomPassword` resource. Pulumi generates it on the first `pulumi up`. The value is stored encrypted in the state and stays the same on every later run.
 
-Inside the program the value is an `Output[str]` with the secret flag. Pulumi passes it to the Vault secret and into the cloud-init of both nodes. It's shown as `[secret]` instead of the value in the preview and in the logs.
+Inside the program the value is an `Output[str]` with the secret flag. Pulumi passes it to the Vault secret and into the cloud-init of both nodes. It is shown as `[secret]` instead of the value in the preview and in the logs.
 
 ### Cloud-init
 
@@ -217,7 +202,7 @@ A few facts about OCI and k3s on 1 GB that are good to know before the first `pu
 - Capacity for the micro shape is not guaranteed. The repository has [a script that checks the capacity](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/scripts/check-capacity.sh). Run it before any replacement.
 - OCI rejects changes to `user_data` and SSH keys on a live instance. So a change to cloud-init means that the nodes must be recreated.
 - A deleted vault waits 7 to 30 days for its deletion and still counts against the limit of one. A rebuild of the cluster deliberately [keeps the vault](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/docs/OPERATIONS.md#rebuild-the-cluster-and-keep-the-vault).
-- The OCI Ubuntu image rejects forwarded traffic with iptables rules. It's fixed in the cloud-init scripts.
+- The OCI Ubuntu image rejects forwarded traffic with iptables rules. It is fixed in the cloud-init scripts.
 
 ## Real world
 
@@ -227,8 +212,8 @@ The next post will be about one of those tools.
 
 ## Try it out
 
-1. Register an OCI account: https://signup.cloud.oracle.com/
-1. Clone the repository: https://github.com/DeV1L/oracle-cloud-k3s
+1. Register an OCI account: <https://signup.cloud.oracle.com/>
+1. Clone the repository: <https://github.com/DeV1L/oracle-cloud-k3s>
 1. Create the OCI credentials: an API signing key and a Customer Secret Key.
 1. Put the region, the availability domain and the SSH public key into [`Pulumi.default.yaml`](https://github.com/DeV1L/oracle-cloud-k3s/blob/main/pulumi/Pulumi.default.yaml).
 1. Run `pulumi up`, or start the GitHub Actions workflow.

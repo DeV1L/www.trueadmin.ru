@@ -193,8 +193,10 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll (~> 4.2)
+  jekyll-feed
   jekyll-include-cache
   jekyll-remote-theme
+  jekyll-sitemap
   minimal-mistakes-jekyll
   webrick (~> 1.7)
 
