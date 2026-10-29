@@ -215,21 +215,29 @@ The prompt gives the model the sent date, the weekday and today's date, all in t
 
 The Anthropic SDK and the tool itself use `httpx2`, and at the `INFO` level it logs the URL of every request. Telegram URLs contain the bot token. A log formatter replaces the token in every line, tracebacks included. The path reads `/bot<token>/`.
 
-## Three weeks in Live
+## Three weeks later
 
-So far, the app has being running for thee weeks on the free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html). 
-The Dockerfile, the Helm chart and the GitHub Actions pipeline are in the repository.
+So far, the app has been running for three weeks on the free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html). The Dockerfile, the Helm chart and the GitHub Actions pipeline are in the repository.
 
-[SCREENSHOT: kubectl get pods and the logs of the app]
+[![kubectl get deploy,pods](/images/kindergarten-email-checker-k8s-pods.png)](/images/kindergarten-email-checker-k8s-pods.png)
 
-Here is some statistic.
+It needs about 60 MiB of memory:
 
-- [NUMBER: emails processed]
-- [NUMBER: posts without a summary, the fallback]
-- [NUMBER: emails in Failed]
-- DeepSeek cost: [NUMBER] for the period. The estimate was "cents per month", and it holds.
+[![Memory usage of the pod](/images/kindergarten-email-checker-k8s-memory.png)](/images/kindergarten-email-checker-k8s-memory.png)
 
-[SCREENSHOT: an example where the summary got a tricky email right, for example a relative date or a scanned PDF]
+The logs: the start check, then one line per request and one line per processed email.
+
+[![Logs of the app](/images/kindergarten-email-checker-k8s-logs.png)](/images/kindergarten-email-checker-k8s-logs.png)
+
+Here is some statistics:
+
+- Weeks online: `3`
+- Emails processed: `15` 
+- DeepSeek: `56` requests, `215k` tokens and `3` cents spend (btw, two spikes are the tests).
+
+[![DeepSeek usage](/images/kindergarten-email-checker-deepseek-usage.png)](/images/kindergarten-email-checker-deepseek-usage.png)
+
+[![DeepSeek usage by day](/images/kindergarten-email-checker-deepseek-usage-chart.png)](/images/kindergarten-email-checker-deepseek-usage-chart.png)
 
 The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
 
