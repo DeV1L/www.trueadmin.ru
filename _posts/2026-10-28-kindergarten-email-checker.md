@@ -105,23 +105,29 @@ A Telegram message holds at most 4096 characters. A summary never gets close. Th
 
 The app moves the email to `Processed` with the IMAP MOVE command. From this moment the email counts as done.
 
-### What a post looks like
+### Post examples
 
 ```text
-🟡 Medium · 🎉 Мероприятие · ⏰ Срок: пт, 9 окт · 📅 Событие: вт, 20 окт 09:30
-Экскурсия в Ботанический сад
+🔴 High · 🔄 Изменение расписания · 📅 Событие: пн, 12 окт
+Понедельник 12.10 — выходной: День культурного разнообразия
 
-<three short sentences in Russian>
+В понедельник 12 октября детский сад не работает: государственный праздник — Día del Respeto a la Diversidad Cultural (День уважения к культурному разнообразию). Занятия возобновятся во вторник 13 октября. От родителей ничего не требуется.
+📎 Вложения: Screenshot_20261009_114802_ChatGPT (1).jpg
 
-Что сделать: <one line, what the parent must do>
-📎 Вложения: menu.pdf, autorizacion.pdf
-
-Тема: <subject> · От: <sender> · Отправлено: пт, 2 окт 2026 14:52
+Тема: DÍA DEL RESPETO A LA DIVERSIDAD CULTURAL · От: saladedosceleste2026@gmail.com · Отправлено: сб, 10 окт 2026 11:00
 ```
 
-The first line has everything I need to decide whether to read on: urgency, category, deadline, event date. The attachments are listed by name but never uploaded. The original email stays in the dedicated mailbox, one click away.
+The first line shows what kind of email it was: urgency, category, deadline, event date. Then the title and the summary itself: what, when, what to do or bring. When there is something to do, it gets its own line. The attachments are listed by name but not uploaded. 
 
-[SCREENSHOT: the Telegram group with two or three posts, one of them from the email above]
+A couple of real examples:
+
+![Email: Día del respeto a la diversidad cultural](/images/kindergarten-email-checker-email-example_01_em.png)
+
+![Post: Monday 12.10 is a day off](/images/kindergarten-email-checker-email-example_01_tg.png)
+
+![Email: Biblioteca circulante](/images/kindergarten-email-checker-email-example_02_em.png)
+
+![Post: Biblioteca circulante project](/images/kindergarten-email-checker-email-example_02_tg.png)
 
 ## Interesting details
 
