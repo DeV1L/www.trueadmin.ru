@@ -57,14 +57,53 @@ Gmail labels are the only state: `INBOX` is the queue; `Processed`, `Ignored` an
 
 ### Processing one email
 
-1. Fetch the unseen emails in `INBOX` without marking them as seen.
-2. Compare the sender with the allowlist. A stranger goes to `Ignored` without a post.
-3. Extract the content: the text body, the text of PDFs with a text layer, page images of scanned PDFs, the photos. Images under 20 KB are skipped, they are logos and signatures.
-4. Call the model. It returns the summary as a tool call, validated against a Pydantic schema. If the answer is unusable, one retry with the validation error. If the second answer is unusable too, the post carries the original text instead of a summary.
-5. Post to Telegram.
-6. Move the email to `Processed`. This is the commit point.
+Every 10 minutes the app checks the mailbox. It opens a new IMAP connection, creates the state labels if they are missing, and asks for the unseen emails in `INBOX`. It fetches them one by one, without marking them as seen, so one email with its attachments is in memory at a time. Each email goes through six stages.
 
-Telegram is called before the move. A crash between the two gives one duplicate post, never a lost email. I prefer that direction.
+#### 1. Allowlist
+
+The app reads the `From` header and compares it with the allowlist. Gmail forwarding keeps this header untouched, so the forwarded copy still shows the kindergarten address. If the sender is on the list, the email moves on to the next stage. If not, the app moves it to `Ignored`.
+
+#### 2. Extraction
+
+The model gets text and images. So the app converts every part of the email to text or to an image:
+
+- **The body.** The app takes the `text/plain` part of the body. When the email has only an HTML part, it converts the HTML to text. Long bodies are cut at 40,000 characters.
+- **PDFs.** If the pages have a text layer, more than 200 characters per page on average, the app extracts the text. If not, it is probably a scan, and the app renders each page to a PNG image.
+- **Photos.** JPEG, PNG and GIF attachments go to the model encoded in base64. Images under 20 KB (logos, signatures, etc.) are skipped.
+
+Attachments over 10 MB and files of other types do not go to the model.
+
+#### 3. Prompt
+
+The app assembles the request in the Anthropic Messages API format:
+
+- The system prompt.
+- One user message with a text block: the metadata (sender, subject, dates, etc.), the body text, the text of each PDF.
+- The images, in the same user message, each as a base64 image block.
+
+#### 4. Model call
+The app sends the request to the DeepSeek Anthropic-compatible API. It has no JSON mode and no structured output, but it supports tools, and a tool has a JSON schema.
+
+So, Instead of a text answer, the model calls one tool, `report_summary`, with the summary as the arguments of that call. The input schema of the tool is generated from a Pydantic model. The app validates the tool input against that model.
+
+If the input is invalid or the model did not call the tool, the app sends the error back as a tool result and asks again. If the second answer is malformed too, the app posts the original text.
+
+#### 5. Post
+
+The app builds one Telegram message from the fields and sends it with the Bot API:
+
+- A header line: the urgency, the category, the deadline and the event date.
+- The title in bold.
+- The summary.
+- "What to do", when the model found an action.
+- The attachment names, when there are any.
+- A footer: the subject, the sender and the sent date of the email.
+
+A Telegram message holds at most 4096 characters. A summary never gets close. The fallback post with the original text can, so the app cuts the text to fit.
+
+#### 6. Move
+
+The app moves the email to `Processed` with the IMAP MOVE command. From this moment the email counts as done.
 
 ### What a post looks like
 
@@ -92,7 +131,7 @@ I did not want a database for a few emails a day. The tool has nothing on disk. 
 
 ![Gmail labels as the state](/images/kindergarten-email-checker-labels.png)
 
-The bonus: the Gmail web UI is the admin interface. I open the `Failed` label and see what went wrong. I drag an email back to `INBOX` and the tool processes it again at the next poll. No commands, no SQL.
+The bonus: the Gmail web UI is the admin interface. I open the `Failed` label and see what went wrong. I drag an email back to `INBOX` and the tool processes it again at the next check. No commands, no SQL.
 
 ### The model call
 
@@ -180,7 +219,7 @@ The tool went live in mid-October 2026. Some numbers:
 
 And the problems I found, in the order I found them.
 
-**IMAP IDLE was the wrong choice.** The first version kept one IMAP connection open and waited with IDLE, so a post appeared seconds after the email. Gmail and the network closed that connection a few times every day. Nothing was lost, the tool reconnected, but every drop was a warning in the log and I kept looking at it. I replaced IDLE with a plain poll: a new connection every 10 minutes, process, log out. The cost is a delay of up to 10 minutes. For a kindergarten, that is real time.
+**IMAP IDLE was the wrong choice.** The first version kept one IMAP connection open and waited with IDLE, so a post appeared seconds after the email. Gmail and the network closed that connection a few times every day. Nothing was lost, the tool reconnected, but every drop was a warning in the log and I kept looking at it. I replaced IDLE with a plain check every 10 minutes: a new connection, process, log out. The cost is a delay of up to 10 minutes. For a kindergarten, that is real time.
 
 **Gmail shows the MOVE capability only after login.** The IMAP library reads the capabilities before login, sees no MOVE, and falls back to copy and delete. With some Gmail settings, "delete" means "move to Trash". With that, a "processed" email can end in Trash. The fix is to read the capability list again after login.
 
@@ -188,11 +227,11 @@ And the problems I found, in the order I found them.
 
 **The urgency rule.** Described above. The topic does not decide the urgency any more.
 
-**Memory.** A review found that a poll fetched all unseen emails at once, with their attachments. After a weekend, or after a restart with a backlog, that is many photos in memory at the same time on a node with 1 GB. Now the tool fetches one email at a time. One email with its attachments is in memory, then the next.
+**Memory.** A review found that a check fetched all unseen emails at once, with their attachments. After a weekend, or after a restart with a backlog, that is many photos in memory at the same time on a node with 1 GB. Now the tool fetches one email at a time. One email with its attachments is in memory, then the next.
 
 **Graceful shutdown.** `docker stop` or a pod deletion could hit the tool between the Telegram post and the move to `Processed`, and the email would get a second post after the restart. Now `SIGTERM` sets a flag, the tool finishes the current email, logs out and exits with code 0. The stop grace period is 180 seconds, enough for a model call with one retry.
 
-**Rolling updates give a short overlap.** After the new pod passes its start check, both pods poll until the old one stops, at most 10 seconds. An email that arrives in that window gets two posts. I accepted this one. The alternative is `Recreate` with a gap, and a gap is worse than a duplicate.
+**Rolling updates give a short overlap.** After the new pod passes its start check, both pods check the mailbox until the old one stops, at most 10 seconds. An email that arrives in that window gets two posts. I accepted this one. The alternative is `Recreate` with a gap, and a gap is worse than a duplicate.
 
 What did not happen: [CONFIRM: no email was lost, and the fallback post with the original text never fired / fired N times].
 
