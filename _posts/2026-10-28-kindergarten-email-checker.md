@@ -231,10 +231,12 @@ Here is some statistic.
 
 [SCREENSHOT: an example where the summary got a tricky email right, for example a relative date or a scanned PDF]
 
+The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
+
 ## What is next
 
-An evaluation of different models. I have about 100 emails from the kindergarten by now, with the summaries that `deepseek-flash` wrote for them. I will turn them into a dataset: the email as the model sees it, and the expected urgency, category, deadline and event date. Then I can run the same prompt against other models and compare. The questions are simple: which models get the dates and the urgency right, what does a wrong answer look like, and how much does each cost per email. The dataset also gives me a regression test for the prompt, which I change by feel today.
+I have about 100 emails from the kindergarten by now, and the app has processed only a part of them. I'm going to build a golden dataset and can run different models against it and measure them: accuracy on each field, cost per email, speed, etc. 
 
-That will be the next post.
+That probably will be the next post. Stay tuned.
 
-The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
+
