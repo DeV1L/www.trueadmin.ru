@@ -30,9 +30,9 @@ I don't speak Spanish, so I have to translate every email. And here is the probl
 
 So, I decided to build a tool that processes these emails for me, classifies them and sends a short summary in Russian to a Telegram group where my wife and I can comfortably read them.
 
-## Initial conditions and constraints
+## A starting point
 
-Before writing code, I wrote down what the tool must and must not do:
+Here is the general idea:
 
 - **No access to a personal mailbox:** A tool that reads my whole inbox with an LLM is not something I want to run.
 - **Simple architecture:** One container, no overhead. It should run on my Always Free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html).
@@ -40,20 +40,20 @@ Before writing code, I wrote down what the tool must and must not do:
 - **Process images and PDFs:** Most of the content lives there, so the model has to see them.
 - **Minimize costs:** Don't send too much to the LLM, and use a cheap one.
 
-## Architecture
+## Implementation
+A high-level view:
+
+1. A forwarding filter in the personal mailbox forwards the emails from the kindergarten addresses to the dedicated mailbox.
+2. Every 10 minutes, the app connects to the dedicated mailbox over IMAP with an [app password](https://support.google.com/mail/answer/185833) and checks for new emails.
+3. It checks each unseen email against the sender allowlist and processes the matching ones one by one. Then it logs out.
+4. The app extracts the text and the attachments from the email and sends them to DeepSeek through the Anthropic-compatible API.
+5. The model returns a structured summary: a Russian title and summary, urgency, category, action, deadline and event date.
+6. The app posts the summary to the Telegram group. When the email has attachments, the post lists their names. Then the app moves the email to the `Processed` label.
+
+Gmail labels are the only state: `INBOX` is the queue; `Processed`, `Ignored` and `Failed` record the outcome. No database is needed.
 
 ![Architecture](/images/kindergarten-email-checker-architecture.png)
 <!-- Mermaid source in docs/ARCHITECTURE.md, "System overview". Export as PNG. -->
-
-The parts:
-
-- **A forwarding filter** in my personal Gmail. It matches the kindergarten addresses and forwards each email to a dedicated Gmail account. This is the whole "integration" with my mailbox: a filter that I set up once in the Gmail settings.
-- **A dedicated Gmail account** that only the tool uses. It logs in over IMAP with an app password. The Gmail labels are the only state of the tool: `INBOX` is the queue, `Processed`, `Ignored` and `Failed` record the outcome.
-- **One Python process in a Docker container.** Every 10 minutes it connects to the mailbox, takes the unseen emails, processes them one by one and logs out.
-- **DeepSeek** with the model `deepseek-flash`. It accepts images, it is cheap, and it speaks the Anthropic Messages API format, so I use the `anthropic` SDK with a custom base URL.
-- **A Telegram bot** that posts to a private group with two members: my wife and me.
-
-The container makes outbound connections only: IMAP to Gmail, HTTPS to DeepSeek and Telegram. No ports, no webhooks, no public endpoint.
 
 ### Processing one email
 
