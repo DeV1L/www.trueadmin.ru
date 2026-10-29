@@ -149,7 +149,7 @@ There is no database and the tool has nothing on disk. An email is in exactly on
 
 Bonus point: the Gmail web UI is the admin interface. I open the `Failed` label and see what went wrong. I drag an email back to `INBOX` and the tool processes it again at the next check.
 
-### The model call
+### DeepSeek quirks
 
 DeepSeek serves the Anthropic Messages API format at `https://api.deepseek.com/anthropic`. The whole call is one request:
 
@@ -167,31 +167,36 @@ response = client.messages.create(
 )
 ```
 
-Two things in it took a while to find out.
+However DeepSeek pretends to be a cheap version of Antropic, it doesn't.
+Two bugs that took a while to figure out.
 
-**Thinking and a forced tool call do not go together.** I wanted thinking on: the emails have dates like "el viernes" that must be resolved from the sent date, and the urgency needs a small judgement. I also wanted a structured answer, so the summary is the input of one tool, `report_summary`, with a JSON schema generated from a Pydantic model. The obvious way to make the model call that tool is `tool_choice={"type": "tool", "name": "report_summary"}`. DeepSeek answers: "Thinking mode does not support this tool_choice". So `tool_choice` is `auto`, and the system prompt tells the model to call the tool exactly once. [CONFIRM: in three weeks it never answered in prose instead of calling the tool.]
+1) **Thinking and a forced tool call do not work together.**
+Thinking must be turned on: the emails have dates like "el viernes" that must be resolved from the sent date. Also urgency needs a judgement.
+At the same time the answer must be as structured data, so the summary comes back as a call of the `report_summary` tool, whose JSON schema is generated from a Pydantic model. The Messages API has a way to force a specific tool: `tool_choice={"type": "tool", "name": "report_summary"}`. But DeepSeek rejects it with the error: `Thinking mode does not support this tool_choice`.
+The workaround is `tool_choice` set to `auto`, plus a system prompt that tells the model to call the tool exactly once.
 
-**Invalid JSON looks like an empty call.** When the model writes tool arguments that are not valid JSON, DeepSeek does not report an error. It returns the tool call with the input `{}`. Pydantic rejects that, and the tool sends the error back as a `tool_result` block with the full previous response, thinking blocks included. [CONFIRM: The second answer has been fine every time.]
+2) **Invalid JSON looks like an empty call.**
+Occasionally DeepSeek writes tool arguments that are not valid JSON and doesn't report an error. It returns the tool call with the input `{}`. Pydantic rejects that, and the app sends the error back as a `tool_result` block with the full previous response and thinking blocks included. The second attempt has been fine every time so far. 
 
 ### "null" is not null
 
-The schema has four optional fields: the action, the deadline, the event date and the event time. The model sometimes writes the string `"null"` instead of a JSON null. The fix is three lines: a validator that treats `""`, `"null"` and `"none"` as no value. It is cheaper than a retry.
+The schema has four optional fields: `action`, `deadline`, `event date` and `event time`. The model sometimes writes the string `"null"` instead of a JSON null. As a fix, a validator handles it: the strings `""`, `"null"` and `"none"` count as no value.
 
 ### Urgency is about time, not about the topic
 
-My first prompt said: `high` for anything urgent, cancelled, closed, or about health or safety. The model did what I asked. Every health notice became red, including "if your child has symptoms, keep them at home". That is a rule, not an alarm.
+The first prompt version said: `high` for anything urgent, cancelled, closed, or about health or safety. The model did exactly that. Every health notice became red, including "if your child has symptoms, keep them at home". This was a false alarm.
 
 Now the prompt asks one question: how soon must the parent do something?
 
-- `high`: act within two days, or attendance changes within two days (a closure, an early pickup).
+- `high`: act within two days, or attendance changes within two days.
 - `medium`: act later, or an event with the child later.
-- `low`: nothing is required. General rules and conditional instructions are `low`.
+- `low`: nothing is required. General rules and conditional instructions, such as "if your child has symptoms, keep them at home", are `low`.
 
-The topic goes into the category instead: payment, event, closure, health, and so on. The category is shown, nothing depends on it.
+The topic went to a separate field, the category: `payment`, `event`, `closure`, `health`, and so on. Category says what the email is about, urgency says how soon. So a health notice can be `health` and `low` at the same time. The category is only a label in the first line of the post. 
 
 ### Images and PDFs
 
-DeepSeek accepts images but not documents. So the tool does the paperwork:
+The Anthropic API can take a PDF as a document block, and the model reads it. DeepSeek's endpoint does not support that. So the app does the transformations:
 
 | Input | What the model gets |
 |---|---|
@@ -201,55 +206,28 @@ DeepSeek accepts images but not documents. So the tool does the paperwork:
 | JPEG, PNG, GIF, WebP | As is, when larger than 20 KB |
 | Anything else | Not sent. The file name is listed in the prompt and in the post |
 
-A "text layer" is present when the average page has more than 200 characters. Below that, it is a scan.
 
 ### Dates and the timezone
 
-The prompt gives the model the sent date, the weekday and today's date, all in the Buenos Aires timezone. "Mañana" in an email sent on Friday evening is Saturday, not the day I read it. The post shows the deadline and the event with the weekday, which is what a parent looks at first.
+The prompt gives the model the sent date, the weekday and today's date, all in the Buenos Aires timezone. The emails say "el lunes" or "el viernes", not a date, and the model can only resolve that from the day the email was sent. The first example above is one: the text says "el día lunes", the Telegram post says 12 October. 
 
 ### The bot token in the logs
 
-A small one. The Anthropic SDK and the tool itself use `httpx2`, and at the `INFO` level it logs the URL of every request. Telegram URLs contain the bot token. A log formatter replaces the token in every line, tracebacks included. The path reads `/bot<token>/`.
+The Anthropic SDK and the tool itself use `httpx2`, and at the `INFO` level it logs the URL of every request. Telegram URLs contain the bot token. A log formatter replaces the token in every line, tracebacks included. The path reads `/bot<token>/`.
 
-## Deployment
+## Three weeks in Live
 
-CI builds the image and pushes it to `ghcr.io/dev1l/kindergarten-email-checker`. The host pulls the image, it never builds. Tags: `latest` for `main`, the branch name for a branch build, `sha-<commit>` for every build.
+So far, the app has being running for thee weeks on the free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html). 
+The Dockerfile, the Helm chart and the GitHub Actions pipeline are in the repository.
 
-There are two ways to run it:
+[SCREENSHOT: kubectl get pods and the logs of the app]
 
-- **Docker Compose on a VPS.** Two files on the host: `compose.yaml` and `.env`. Update: `docker compose pull && docker compose up -d`.
-- **Kubernetes with a Helm chart.** This is what I use, on the free k3s cluster from the previous post. A GitHub Actions workflow runs `helm upgrade --install` on a manual start with an image tag.
-
-At start, the tool checks the three services once: Telegram must accept the bot token and find the group, Gmail must accept the app password, DeepSeek must accept the API key and report that the account can pay. If one check fails, the process stops with exit code 1, and Kubernetes or Docker restarts it with a growing delay. Without this check, a wrong password would send every email to `Failed`.
-
-On Kubernetes, `/readyz` turns 200 after the start check, and the deployment uses `RollingUpdate` with `maxUnavailable: 0`. A new pod with wrong credentials never becomes ready, and the old pod keeps working. The whole thing fits in a few tens of MB of RAM.
-
-## Three weeks in production
-
-The tool went live in mid-October 2026. Some numbers:
+Here is some statistic.
 
 - [NUMBER: emails processed]
 - [NUMBER: posts without a summary, the fallback]
 - [NUMBER: emails in Failed]
 - DeepSeek cost: [NUMBER] for the period. The estimate was "cents per month", and it holds.
-
-And the problems I found, in the order I found them.
-
-**IMAP IDLE was the wrong choice.** The first version kept one IMAP connection open and waited with IDLE, so a post appeared seconds after the email. Gmail and the network closed that connection a few times every day. Nothing was lost, the tool reconnected, but every drop was a warning in the log and I kept looking at it. I replaced IDLE with a plain check every 10 minutes: a new connection, process, log out. The cost is a delay of up to 10 minutes. For a kindergarten, that is real time.
-
-**Gmail shows the MOVE capability only after login.** The IMAP library reads the capabilities before login, sees no MOVE, and falls back to copy and delete. With some Gmail settings, "delete" means "move to Trash". With that, a "processed" email can end in Trash. The fix is to read the capability list again after login.
-
-**The summaries were too long.** "Two to four sentences" in the prompt became four long sentences with the address of the school and a phone number in each. Now it is at most three short sentences, under 350 characters, and no addresses or phone numbers unless they are needed for the action.
-
-**The urgency rule.** Described above. The topic does not decide the urgency any more.
-
-**Memory.** A review found that a check fetched all unseen emails at once, with their attachments. After a weekend, or after a restart with a backlog, that is many photos in memory at the same time on a node with 1 GB. Now the tool fetches one email at a time. One email with its attachments is in memory, then the next.
-
-**Graceful shutdown.** `docker stop` or a pod deletion could hit the tool between the Telegram post and the move to `Processed`, and the email would get a second post after the restart. Now `SIGTERM` sets a flag, the tool finishes the current email, logs out and exits with code 0. The stop grace period is 180 seconds, enough for a model call with one retry.
-
-**Rolling updates give a short overlap.** After the new pod passes its start check, both pods check the mailbox until the old one stops, at most 10 seconds. An email that arrives in that window gets two posts. I accepted this one. The alternative is `Recreate` with a gap, and a gap is worse than a duplicate.
-
-What did not happen: [CONFIRM: no email was lost, and the fallback post with the original text never fired / fired N times].
 
 [SCREENSHOT: an example where the summary got a tricky email right, for example a relative date or a scanned PDF]
 
