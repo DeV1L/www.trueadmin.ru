@@ -17,6 +17,11 @@ Medium import lessons from the k3s post:
     .drawio sources are next to them.
   - Code blocks get dropped by the importer. Re-add them in the editor.
   - Medium has two heading sizes. H2 = chapter, H3 = subsection (Ctrl+Alt+2).
+  - The side-by-side pairs in "Post examples" are HTML figures. Medium
+    imports them as four stacked images. To put a pair in one row, select
+    the two images in the editor and pick the two-column grid layout.
+  - The #### headings of the six stages come out as the small heading too,
+    the same as H3. The numbers keep the order readable.
 -->
 
 ## Introduction
@@ -25,7 +30,7 @@ My two-year-old daughter attends a kindergarten in Argentina. There is a rule th
 
 I don't speak Spanish, so I have to translate every email. And here is the problem. They tend to send emails with little text (or even without it) but add images with text on them. A built-in Gmail translator does not help with this. Here is an example.
 
-![A typical email](/images/kindergarten-email-checker-email-example.png)
+[![A typical email](/images/kindergarten-email-checker-email-example.png)](/images/kindergarten-email-checker-email-example.png)
 
 
 So, I decided to build a tool that processes these emails for me, classifies them and sends a short summary in Russian to a Telegram group where my wife and I can comfortably read them.
@@ -111,23 +116,28 @@ The app moves the email to `Processed` with the IMAP MOVE command. From this mom
 🔴 High · 🔄 Изменение расписания · 📅 Событие: пн, 12 окт
 Понедельник 12.10 — выходной: День культурного разнообразия
 
-В понедельник 12 октября детский сад не работает: государственный праздник — Día del Respeto a la Diversidad Cultural (День уважения к культурному разнообразию). Занятия возобновятся во вторник 13 октября. От родителей ничего не требуется.
+В понедельник 12 октября детский сад не работает: государственный праздник —
+Día del Respeto a la Diversidad Cultural (День уважения к культурному разнообразию).
+Занятия возобновятся во вторник 13 октября. От родителей ничего не требуется.
 📎 Вложения: Screenshot_20261009_114802_ChatGPT (1).jpg
 
-Тема: DÍA DEL RESPETO A LA DIVERSIDAD CULTURAL · От: saladedosceleste2026@gmail.com · Отправлено: сб, 10 окт 2026 11:00
+Тема: DÍA DEL RESPETO A LA DIVERSIDAD CULTURAL · От: saladedosceleste2026@gmail.com
+Отправлено: сб, 10 окт 2026 11:00
 ```
 
 The first line shows what kind of email it was: urgency, category, deadline, event date. Then the title and the summary itself: what, when, what to do or bring. When there is something to do, it gets its own line. The attachments are listed by name but not uploaded. 
 
 A couple of real examples:
 
-![Email: Día del respeto a la diversidad cultural](/images/kindergarten-email-checker-email-example_01_em.png)
-
-![Post: Monday 12.10 is a day off](/images/kindergarten-email-checker-email-example_01_tg.png)
-
-![Email: Biblioteca circulante](/images/kindergarten-email-checker-email-example_02_em.png)
-
-![Post: Biblioteca circulante project](/images/kindergarten-email-checker-email-example_02_tg.png)
+<figure class="half">
+  <a href="/images/kindergarten-email-checker-email-example_01_em.png"><img src="/images/kindergarten-email-checker-email-example_01_em.png" alt="Email: Día del respeto a la diversidad cultural"></a>
+  <a href="/images/kindergarten-email-checker-email-example_01_tg.png"><img src="/images/kindergarten-email-checker-email-example_01_tg.png" alt="Post: Monday 12.10 is a day off"></a>
+</figure>
+---
+<figure class="half">
+  <a href="/images/kindergarten-email-checker-email-example_02_em.png"><img src="/images/kindergarten-email-checker-email-example_02_em.png" alt="Email: Biblioteca circulante"></a>
+  <a href="/images/kindergarten-email-checker-email-example_02_tg.png"><img src="/images/kindergarten-email-checker-email-example_02_tg.png" alt="Post: Biblioteca circulante project"></a>
+</figure>
 
 ## Interesting details
 
