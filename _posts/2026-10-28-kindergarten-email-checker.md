@@ -30,20 +30,15 @@ I don't speak Spanish, so I have to translate every email. And here is the probl
 
 So, I decided to build a tool that processes these emails for me, classifies them and sends a short summary in Russian to a Telegram group where my wife and I can comfortably read them.
 
-The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
-
 ## Initial conditions and constraints
 
 Before writing code, I wrote down what the tool must and must not do:
 
-- **No access to my personal mailbox.** A tool that reads my whole inbox with an LLM is not something I want to run, even on my own server. The kindergarten emails must get to the tool some other way.
-- **Only the kindergarten.** Senders that are not on an allowlist are never sent to the model.
-- **Simple and cheap.** One container, no database, no extra services. It runs next to my other small experiments on a 1 GB node.
-- **Every email becomes one post.** Short Russian summary, an urgency label, a category, a deadline and an event date when there is one. No silent posts, no pinning, no digest. The urgency is just a label in the first line.
-- **Images and PDFs are part of the input.** Most of the content lives there, so the model has to see them.
-- **Nothing to back up.** If the server dies, I start the container somewhere else and it continues.
-
-The input is small: a few emails a day, never more than three images in one email. That shaped many decisions below. There was no reason to build for thousands of emails per hour.
+- **No access to a personal mailbox:** A tool that reads my whole inbox with an LLM is not something I want to run.
+- **Simple architecture:** One container, no overhead. It should runs on my Always Free k3s from the [previous post]().
+- **One email -> One Telegram message:** Short summary in Russian, with an urgency and a category labels.
+- **Process Images and PDFs:** Most of the content lives there, so the model has to see them.
+- **Minimize costs:** Don't send too much to an LLM, use a cheap one.
 
 ## Architecture
 
@@ -208,3 +203,5 @@ What did not happen: [CONFIRM: no email was lost, and the fallback post with the
 An evaluation of different models. I have about 100 emails from the kindergarten by now, with the summaries that `deepseek-flash` wrote for them. I will turn them into a dataset: the email as the model sees it, and the expected urgency, category, deadline and event date. Then I can run the same prompt against other models and compare. The questions are simple: which models get the dates and the urgency right, what does a wrong answer look like, and how much does each cost per email. The dataset also gives me a regression test for the prompt, which I change by feel today.
 
 That will be the next post.
+
+The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
