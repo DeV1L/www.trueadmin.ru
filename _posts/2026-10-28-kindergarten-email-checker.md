@@ -35,10 +35,10 @@ So, I decided to build a tool that processes these emails for me, classifies the
 Before writing code, I wrote down what the tool must and must not do:
 
 - **No access to a personal mailbox:** A tool that reads my whole inbox with an LLM is not something I want to run.
-- **Simple architecture:** One container, no overhead. It should runs on my Always Free k3s from the [previous post]().
-- **One email -> One Telegram message:** Short summary in Russian, with an urgency and a category labels.
-- **Process Images and PDFs:** Most of the content lives there, so the model has to see them.
-- **Minimize costs:** Don't send too much to an LLM, use a cheap one.
+- **Simple architecture:** One container, no overhead. It should run on my Always Free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html).
+- **One email -> one Telegram message:** A short summary in Russian, with urgency and category labels.
+- **Process images and PDFs:** Most of the content lives there, so the model has to see them.
+- **Minimize costs:** Don't send too much to the LLM, and use a cheap one.
 
 ## Architecture
 
