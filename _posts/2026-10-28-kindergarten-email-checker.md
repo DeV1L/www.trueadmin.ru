@@ -57,7 +57,7 @@ A high-level view:
 
 Gmail labels are the only state: `INBOX` is the queue; `Processed`, `Ignored` and `Failed` record the outcome. No database is needed.
 
-![Architecture](/images/kindergarten-email-checker-architecture.png)
+[![Architecture](/images/kindergarten-email-checker-architecture.png)](/images/kindergarten-email-checker-architecture.png)
 <!-- Mermaid source in docs/ARCHITECTURE.md, "System overview". Export as PNG. -->
 
 ### Processing one email
@@ -143,11 +143,11 @@ A couple of real examples:
 
 ### Gmail labels as the database
 
-I did not want a database for a few emails a day. The tool has nothing on disk. An email is in exactly one label, and the label says what happened to it. Moving the email is the only write the tool ever does.
+There is no database and the tool has nothing on disk. An email is in exactly one label, and the label says what happened to it. 
 
 ![Gmail labels as the state](/images/kindergarten-email-checker-labels.png)
 
-The bonus: the Gmail web UI is the admin interface. I open the `Failed` label and see what went wrong. I drag an email back to `INBOX` and the tool processes it again at the next check. No commands, no SQL.
+Bonus point: the Gmail web UI is the admin interface. I open the `Failed` label and see what went wrong. I drag an email back to `INBOX` and the tool processes it again at the next check.
 
 ### The model call
 
