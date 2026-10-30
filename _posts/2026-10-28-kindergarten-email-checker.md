@@ -29,13 +29,11 @@ I don't speak Spanish, so I have to translate every email. And here is the probl
 
 So, I decided to build a tool that processes these emails for me, classifies them and sends a short summary in Russian to a Telegram group where my wife and I can comfortably read them.
 
-## A starting point
-
-Here is the general idea:
+## The general idea
 
 - **No access to my personal mailbox:** A tool that reads my whole inbox with an LLM is not something I want to run.
 - **Simple architecture:** One container, no overhead. It should run on my Always Free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html).
-- **One email -> one Telegram message:** A short summary in Russian, with urgency and category labels.
+- **One email → one Telegram message:** A short summary in Russian, with urgency and category labels.
 - **Process images and PDFs:** Most of the content lives there, so the model has to see them.
 - **Minimize costs:** Don't send too much to the LLM, and use a cheap one.
 
@@ -43,16 +41,13 @@ Here is the general idea:
 
 A high-level view:
 
-1. A forwarding filter in the personal mailbox forwards the emails from the kindergarten addresses to the dedicated mailbox.
-2. Every 10 minutes, the app connects to the dedicated mailbox over IMAP with an [app password](https://support.google.com/mail/answer/185833) and checks for new emails.
-3. It compares each unseen email with the sender allowlist and processes the matching ones one by one. Then it logs out.
-4. The app extracts the text and the attachments from the email and sends them to DeepSeek through the Anthropic-compatible API.
-5. The model returns a structured summary: a Russian title and summary, urgency, category, action, deadline and event date.
-6. The app posts the summary to the Telegram group. When the email has attachments, the post lists their names. Then the app moves the email to the `Processed` label.
+[![Architecture](/images/kindergarten-email-checker-architecture.png)](/images/kindergarten-email-checker-architecture.png)
+
+1. A forwarding filter in the personal mailbox forwards the emails from the kindergarten addresses to a dedicated mailbox.
+2. Every 10 minutes the app connects to the dedicated mailbox over IMAP with an [app password](https://support.google.com/mail/answer/185833), processes the new emails one by one and logs out.
+3. For each email, the LLM writes a summary, the app posts it to the Telegram group and moves the email to the `Processed` label.
 
 Gmail labels are the only state: `INBOX` is the queue; `Processed`, `Ignored` and `Failed` record the outcome. No database is needed.
-
-[![Architecture](/images/kindergarten-email-checker-architecture.png)](/images/kindergarten-email-checker-architecture.png)
 
 ### Processing one email
 
@@ -142,7 +137,7 @@ There is no database and the app has nothing on disk. An email is in exactly one
 
 ![Gmail labels as the state](/images/kindergarten-email-checker-labels.png)
 
-Bonus point: the Gmail web UI is the admin interface. I open the `Failed` label and see what went wrong. I drag an email back to `INBOX` and the app processes it again at the next check.
+As a bonus, the Gmail web UI is the admin interface. The `Failed` label shows what went wrong. An email moved back to `INBOX` gets processed again at the next check.
 
 ### DeepSeek quirks
 
@@ -184,17 +179,9 @@ Now the prompt asks one question: how soon must the parent do something?
 
 The topic went to a separate field, the category: `payment`, `event`, `closure`, `health`, and so on. Category says what the email is about, urgency says how soon. So a health notice can be `health` and `low` at the same time. The category is only a label in the first line of the post.
 
-### Images and PDFs
+### PDFs as images
 
-The Anthropic API can take a PDF as a document block, and the model reads it. DeepSeek's endpoint does not support that. So the app does the transformations:
-
-| Input | What the model gets |
-|---|---|
-| HTML body | The text/plain part if there is one, otherwise html2text |
-| PDF with a text layer | The text, extracted with pypdfium2 |
-| PDF without a text layer | Each page rendered at 110 dpi, at most 10 pages |
-| JPEG, PNG, GIF, WebP | As is, when larger than 20 KB |
-| Anything else | Not sent. The file name is listed in the prompt and in the post |
+The Anthropic API takes a PDF as a document block, and the model reads it. DeepSeek's endpoint does not support that documents, only images. So, the app renders the pages at 110 dpi and sends them as images.
 
 ### Dates and the timezone
 
