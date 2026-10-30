@@ -20,7 +20,16 @@
   content: none;
 }
 
-/* Headings inside a post: a clearly smaller h3. */
+/* Headings inside a post: a clear step down from h2 to h3 to h4.
+   em, not rem: the theme sizes headings relative to the content text. */
+.post-content h2 {
+  font-size: 1.5em;
+}
+
 .post-content h3 {
-  font-size: 1.4rem;
+  font-size: 1.2em;
+}
+
+.post-content h4 {
+  font-size: 1.05em;
 }

@@ -1,0 +1,39 @@
+/* Screenshots in figures: a thin edge, so screenshots with a white background have a visible boundary */
+figure img {
+  border: 1px solid #e0e0e0;
+}
+
+/* Side-by-side pairs: images keep their natural size up to the half width and 480px of height,
+   and sit centered next to each other, so a tall and a short screenshot look balanced */
+figure.half {
+  align-items: center;
+}
+
+figure.half > a > img,
+figure.half > img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 480px;
+  margin: 0 auto;
+}
+
+/* Side-by-side figures stack when the content column is narrow, not only when the window is */
+.content-area {
+  container-type: inline-size;
+}
+
+@container (max-width: 700px) {
+  figure.half > a,
+  figure.half > img {
+    width: 100%;
+  }
+}
+
+/* An image that stands alone in a paragraph is centered when it is narrower than the column */
+.post-content > p > img,
+.post-content > p > a > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
