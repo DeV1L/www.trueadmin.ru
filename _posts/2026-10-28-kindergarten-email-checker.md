@@ -27,7 +27,7 @@ I don't speak Spanish, so I have to translate every email. And here is the probl
 
 A typical example.
 
-[![A typical email](/images/kindergarten-email-checker-email-example.png)](/images/kindergarten-email-checker-email-example.png)
+[![A typical email](/images/kindergarten-email-checker-email-example.png){: width="480"}](/images/kindergarten-email-checker-email-example.png)
 
 So, I decided to build a tool that processes these emails for me, classifies them and sends a short summary in Russian to a Telegram group where my wife and I can comfortably read them.
 
