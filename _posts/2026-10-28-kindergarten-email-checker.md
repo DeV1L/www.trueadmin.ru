@@ -1,23 +1,7 @@
 ---
-title: "Reading kindergarten emails with DeepSeek and Telegram"
-date: 2026-10-28
+title: "Kindergarten mail digest with DeepSeek and Telegram"
+date: 2026-10-29
 ---
-
-<!--
-EDITOR NOTES (delete before publishing)
-
-Medium import lessons from the k3s post:
-  - No code inside a link. Write [prompt.md](url), not [`prompt.md`](url).
-  - The two diagrams are PNG files in /images, drawn in draw.io. The
-    .drawio sources are next to them.
-  - Code blocks get dropped by the importer. Re-add them in the editor.
-  - Medium has two heading sizes. H2 = chapter, H3 = subsection (Ctrl+Alt+2).
-  - The side-by-side pairs in "Post examples" are HTML figures. Medium
-    imports them as four stacked images. To put a pair in one row, select
-    the two images in the editor and pick the two-column grid layout.
-  - The #### headings of the six stages come out as the small heading too,
-    the same as H3. The numbers keep the order readable.
--->
 
 ## Introduction
 
@@ -25,15 +9,17 @@ My two-year-old daughter attends a kindergarten in Argentina. There is a rule th
 
 I don't speak Spanish, so I have to translate every email. And here is the problem. They tend to send emails with little text (or even without it) but add images with text on them. The built-in Gmail translator does not help with this.
 
-A typical example:
+A typical example.
 
 [![A typical email](/images/kindergarten-email-checker-email-example.png){: width="480"}](/images/kindergarten-email-checker-email-example.png)
 
-So, I decided to build a tool that processes these emails for me, classifies them and sends a short summary in Russian to a Telegram group where my wife and I can comfortably read them.
+So, I decided to build an app that processes these emails for me, classifies them and sends a short summary in Russian to a Telegram group where my wife and I can comfortably read them.
+
+**The code is on GitHub**: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
 
 ## The general idea
 
-- **No access to my personal mailbox:** A tool that reads my whole inbox with an LLM is not something I want to run.
+- **No access to my personal mailbox:** Something that reads my whole inbox with an LLM is not what I want to run.
 - **Simple architecture:** One container, no overhead. It should fit in my Always Free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html).
 - **One email → one Telegram message:** A short summary in Russian, with urgency and category labels.
 - **Process images and PDFs:** Most of the content lives there, so the model has to see them.
@@ -133,7 +119,7 @@ A couple of real examples:
   <a href="/images/kindergarten-email-checker-email-example_02_tg.png"><img src="/images/kindergarten-email-checker-email-example_02_tg.png" alt="Post: Biblioteca circulante project"></a>
 </figure>
 
-## Interesting details
+## Gotchas
 
 ### Gmail labels as the database
 
@@ -209,33 +195,28 @@ The Anthropic SDK and the app itself use `httpx2`, and at the `INFO` level it lo
 
 ## Real-world usage
 
-The app has been running for three weeks on the free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html). The Dockerfile, the Helm chart and the GitHub Actions pipeline are in the repository.
+The app has been running for three weeks on the free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html).
 
 [![kubectl get deploy,pods](/images/kindergarten-email-checker-k8s-pods.png)](/images/kindergarten-email-checker-k8s-pods.png)
 
-It needs about 60 MiB of memory:
+It needs about 60 MiB of memory.
 
 [![Memory usage of the pod](/images/kindergarten-email-checker-k8s-memory.png)](/images/kindergarten-email-checker-k8s-memory.png)
 
-The logs: the start check, then one line per request and one line per processed email.
-
 [![Logs of the app](/images/kindergarten-email-checker-k8s-logs.png)](/images/kindergarten-email-checker-k8s-logs.png)
 
-Some numbers:
+**Some numbers:**
 
 - Weeks online: `3`
 - Emails processed: `15`
-- DeepSeek: `56` requests, `215k` tokens and `3` cents spent.
+- DeepSeek: `56` requests, `215k` tokens and `0.03` **USD** spent.
 
 [![DeepSeek usage](/images/kindergarten-email-checker-deepseek-usage.png)](/images/kindergarten-email-checker-deepseek-usage.png)
 
 [![DeepSeek usage by day](/images/kindergarten-email-checker-deepseek-usage-chart.png)](/images/kindergarten-email-checker-deepseek-usage-chart.png)
-
-The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
 
 ## Next plans
 
 By now, I have about 100 emails from the kindergarten. I'm going to build a golden dataset, run different models against it and measure them: accuracy, cost per email, speed, etc. It will be interesting to compare expensive frontier models with native structured output against cheap Chinese models like DeepSeek.
 
 That will probably be the next post. Stay tuned.
-
