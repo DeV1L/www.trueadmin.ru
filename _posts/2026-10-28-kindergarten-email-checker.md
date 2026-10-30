@@ -23,7 +23,9 @@ Medium import lessons from the k3s post:
 
 My two-year-old daughter attends a kindergarten in Argentina. There is a rule that all communication between staff and parents happens via email only. They send everything there: important and unimportant news, schedule updates, holiday greetings, payment reminders and so on. So it's a mix of noise and things that I wouldn't want to miss.
 
-I don't speak Spanish, so I have to translate every email. And here is the problem. They tend to send emails with little text (or even without it) but add images with text on them. The built-in Gmail translator does not help with this. Here is an example.
+I don't speak Spanish, so I have to translate every email. And here is the problem. They tend to send emails with little text (or even without it) but add images with text on them. The built-in Gmail translator does not help with this. 
+
+A typical example.
 
 [![A typical email](/images/kindergarten-email-checker-email-example.png)](/images/kindergarten-email-checker-email-example.png)
 
@@ -161,9 +163,19 @@ response = client.messages.create(
 
 DeepSeek looks like a cheap alternative for the Anthropic API, but it is not an exact copy. Two quirks took a while to figure out.
 
-1. **Thinking and a forced tool call do not work together.** Thinking must be turned on: the emails have dates like "el viernes" that must be resolved from the sent date, and urgency needs a judgement. At the same time the answer must be structured data, so the summary comes back as a call of the `report_summary` tool, whose JSON schema is generated from a Pydantic model. The Messages API has a way to force a specific tool: `tool_choice={"type": "tool", "name": "report_summary"}`. DeepSeek rejects it with the error `Thinking mode does not support this tool_choice`. The workaround is `tool_choice` set to `auto`, plus a system prompt that tells the model to call the tool exactly once.
+1. **Thinking and a forced tool call do not work together.** Thinking must be turned on: the emails have dates like "el viernes" that must be resolved from the sent date, and urgency needs a judgement. At the same time the answer must be structured data, so the summary comes back as a call of the `report_summary` tool, whose JSON schema is generated from a Pydantic model. The Messages API has a way to force a specific tool: `tool_choice={"type": "tool", "name": "report_summary"}`. DeepSeek rejects it when thinking is on:
+
+   ```text
+   HTTP 400: {'error': {'message': 'Thinking mode does not support this tool_choice', 'type': 'invalid_request_error'}}
+   ```
+
+   The workaround is `tool_choice` set to `auto`, plus a system prompt that tells the model to call the tool exactly once.
 
 2. **Invalid JSON looks like an empty call.** Occasionally DeepSeek writes tool arguments that are not valid JSON and doesn't report an error. It returns the tool call with the input `{}`. Pydantic rejects that, and the app sends the error back as a `tool_result` block with the full previous response and thinking blocks included. The second attempt has been fine every time so far.
+
+   ```text
+   WARNING kindergarten_email_checker.summarize: uid=11 attempt 1: {"problem": "invalid report_summary input", "input": {}, "errors": [{"type": "missing", "loc": ["title_ru"], "msg": "Field required"}, {"type": "missing", "loc": ["summary_ru"], "msg": "Field required"}, {"type": "missing", "loc": ["urgency"], "msg": "Field required"}, {"type": "missing", "loc": ["category"], "msg": "Field required"}]}
+   ```
 
 ### "null" is not null
 

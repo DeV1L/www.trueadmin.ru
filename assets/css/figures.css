@@ -29,3 +29,11 @@ figure.half > img {
     width: 100%;
   }
 }
+
+/* An image that stands alone in a paragraph is centered when it is narrower than the column */
+.post-content > p > img,
+.post-content > p > a > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
