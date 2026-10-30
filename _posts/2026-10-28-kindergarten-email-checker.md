@@ -139,6 +139,8 @@ There is no database and the app has nothing on disk. An email is in exactly one
 
 As a bonus, the Gmail web UI is the admin interface. The `Failed` label shows what went wrong. An email moved back to `INBOX` gets processed again at the next check.
 
+[![Dragging a processed email back to INBOX in Gmail](/images/kindergarten-email-checker-gmail-labels.png)](/images/kindergarten-email-checker-gmail-labels.png)
+
 ### DeepSeek quirks
 
 DeepSeek serves the Anthropic Messages API format at `https://api.deepseek.com/anthropic`. The whole call is one request:
@@ -191,7 +193,7 @@ The prompt gives the model the sent date, the weekday and today's date, all in t
 
 The Anthropic SDK and the app itself use `httpx2`, and at the `INFO` level it logs the URL of every request. Telegram URLs contain the bot token. A log formatter replaces the token in every line, tracebacks included. The path reads `/bot<token>/`.
 
-## Three weeks later
+## Real-world usage
 
 The app has been running for three weeks on the free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html). The Dockerfile, the Helm chart and the GitHub Actions pipeline are in the repository.
 
@@ -217,9 +219,9 @@ Some numbers:
 
 The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV1L/kindergarten-email-checker).
 
-## What is next
+## Next plans
 
-So far, I have about 100 emails from the kindergarten by now, and the app has processed only a part of them. I'm going to build a golden dataset, run different models against it and measure them: accuracy on each field, cost per email, speed.
+By now, I have about 100 emails from the kindergarten. I'm going to build a golden dataset, run different models against it and measure them: accuracy, cost per email, speed, etc. It will be interesing to compare expensive frontier models with native structured output against cheap Chinese models like DeepSeek.
 
 That will probably be the next post. Stay tuned.
 
