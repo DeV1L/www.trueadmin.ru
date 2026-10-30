@@ -23,9 +23,9 @@ Medium import lessons from the k3s post:
 
 My two-year-old daughter attends a kindergarten in Argentina. There is a rule that all communication between staff and parents happens via email only. They send everything there: important and unimportant news, schedule updates, holiday greetings, payment reminders and so on. So it's a mix of noise and things that I wouldn't want to miss.
 
-I don't speak Spanish, so I have to translate every email. And here is the problem. They tend to send emails with little text (or even without it) but add images with text on them. The built-in Gmail translator does not help with this. 
+I don't speak Spanish, so I have to translate every email. And here is the problem. They tend to send emails with little text (or even without it) but add images with text on them. The built-in Gmail translator does not help with this.
 
-A typical example.
+A typical example:
 
 [![A typical email](/images/kindergarten-email-checker-email-example.png){: width="480"}](/images/kindergarten-email-checker-email-example.png)
 
@@ -34,7 +34,7 @@ So, I decided to build a tool that processes these emails for me, classifies the
 ## The general idea
 
 - **No access to my personal mailbox:** A tool that reads my whole inbox with an LLM is not something I want to run.
-- **Simple architecture:** One container, no overhead. It should run on my Always Free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html).
+- **Simple architecture:** One container, no overhead. It should fit in my Always Free k3s cluster from the [previous post](https://evgeniy.tech/2026/10/20/oracle-cloud-k3s.html).
 - **One email → one Telegram message:** A short summary in Russian, with urgency and category labels.
 - **Process images and PDFs:** Most of the content lives there, so the model has to see them.
 - **Minimize costs:** Don't send too much to the LLM, and use a cheap one.
@@ -45,13 +45,13 @@ A high-level view:
 
 [![Architecture](/images/kindergarten-email-checker-architecture.png)](/images/kindergarten-email-checker-architecture.png)
 
-1. A forwarding filter in the personal mailbox forwards the emails from the kindergarten addresses to a dedicated mailbox.
+1. A forwarding filter in the personal Gmail forwards the emails from the kindergarten addresses to a dedicated mailbox.
 2. Every 10 minutes the app connects to the dedicated mailbox over IMAP with an [app password](https://support.google.com/mail/answer/185833), processes the new emails one by one and logs out.
 3. For each email, the LLM writes a summary, the app posts it to the Telegram group and moves the email to the `Processed` label.
 
 Gmail labels are the only state: `INBOX` is the queue; `Processed`, `Ignored` and `Failed` record the outcome. No database is needed.
 
-### Processing one email
+### Processing flow
 
 Every 10 minutes the app checks the mailbox. It opens a new IMAP connection, creates the state labels if they are missing, and asks for the unseen emails in `INBOX`. It fetches them one by one, without marking them as seen, so one email with its attachments is in memory at a time. Each email goes through six stages.
 
@@ -89,7 +89,7 @@ If the input is invalid or the model did not call the tool, the app sends the er
 
 The app builds one Telegram message from the fields and sends it with the Bot API:
 
-- A header line: the urgency, the category, the deadline and the event date.
+- A header line: `urgency`, `category`, `deadline` and `event date`.
 - The title in bold.
 - The summary.
 - "What to do", when the model found an action.
@@ -123,11 +123,13 @@ A couple of real examples:
 
 <figure class="half">
   <a href="/images/kindergarten-email-checker-email-example_01_em.png"><img src="/images/kindergarten-email-checker-email-example_01_em.png" alt="Email: Día del respeto a la diversidad cultural"></a>
+  →
   <a href="/images/kindergarten-email-checker-email-example_01_tg.png"><img src="/images/kindergarten-email-checker-email-example_01_tg.png" alt="Post: Monday 12.10 is a day off"></a>
 </figure>
 ---
 <figure class="half">
   <a href="/images/kindergarten-email-checker-email-example_02_em.png"><img src="/images/kindergarten-email-checker-email-example_02_em.png" alt="Email: Biblioteca circulante"></a>
+  →
   <a href="/images/kindergarten-email-checker-email-example_02_tg.png"><img src="/images/kindergarten-email-checker-email-example_02_tg.png" alt="Post: Biblioteca circulante project"></a>
 </figure>
 
@@ -161,7 +163,7 @@ response = client.messages.create(
 )
 ```
 
-DeepSeek looks like a cheap alternative for the Anthropic API, but it is not an exact copy. Two quirks took a while to figure out.
+DeepSeek looks like a cheap alternative to the Anthropic API, but it is not an exact copy. Two quirks took a while to figure out.
 
 1. **Thinking and a forced tool call do not work together.** Thinking must be turned on: the emails have dates like "el viernes" that must be resolved from the sent date, and urgency needs a judgement. At the same time the answer must be structured data, so the summary comes back as a call of the `report_summary` tool, whose JSON schema is generated from a Pydantic model. The Messages API has a way to force a specific tool: `tool_choice={"type": "tool", "name": "report_summary"}`. DeepSeek rejects it when thinking is on:
 
@@ -195,7 +197,7 @@ The topic went to a separate field, the category: `payment`, `event`, `closure`,
 
 ### PDFs as images
 
-The Anthropic API takes a PDF as a document block, and the model reads it. DeepSeek's endpoint does not support that documents, only images. So, the app renders the pages at 110 dpi and sends them as images.
+The Anthropic API takes a PDF as a document block, and the model reads it. DeepSeek's endpoint does not support documents, only images. So the app renders the pages at 110 dpi and sends them as images.
 
 ### Dates and the timezone
 
@@ -233,7 +235,7 @@ The code is on GitHub: [DeV1L/kindergarten-email-checker](https://github.com/DeV
 
 ## Next plans
 
-By now, I have about 100 emails from the kindergarten. I'm going to build a golden dataset, run different models against it and measure them: accuracy, cost per email, speed, etc. It will be interesing to compare expensive frontier models with native structured output against cheap Chinese models like DeepSeek.
+By now, I have about 100 emails from the kindergarten. I'm going to build a golden dataset, run different models against it and measure them: accuracy, cost per email, speed, etc. It will be interesting to compare expensive frontier models with native structured output against cheap Chinese models like DeepSeek.
 
 That will probably be the next post. Stay tuned.
 
